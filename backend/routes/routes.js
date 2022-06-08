@@ -60,7 +60,7 @@ router.get("/auth", (req, res) => {
     return db
       .query("SELECT * FROM accounts WHERE username = '" + claims.id + "'")
       .then((result) => {
-        res.send(result[0][0]);
+        res.send(result[0][0].username);
       });
   }
 });

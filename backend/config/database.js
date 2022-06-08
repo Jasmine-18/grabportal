@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-module.exports = new Sequelize("grabportallogin", "root", "",
+module.exports = new Sequelize("grabportallogin", "root", "root",
  {
   host: "localhost",
   dialect: "mysql",

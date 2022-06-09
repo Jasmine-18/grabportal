@@ -15,7 +15,7 @@
       <!-- The username input box -->
       <div>
         <input
-          v-model="data.username"
+          v-model="user.username"
           type="text"
           placeholder="Enter your username"
           class="px-5 py-1 border-solid border-2 rounded-lg"
@@ -25,13 +25,13 @@
       <!-- The password input box -->
       <div class="m-5">
         <input
-          v-model="data.password"
+          v-model="user.password"
           type="password"
           placeholder="Enter your password"
           class="px-5 py-1 border-solid border-2 rounded-lg"
         />
       </div>
-      <div v-if="data.error">{{ data.errorMsg }}</div>
+      <div v-if="user.error">{{ user.errorMsg }}</div>
       <!-- The Login button -->
       <div class="m-5">
         <button
@@ -51,7 +51,7 @@ import DataService from "../services/DataService";
 export default {
   name: "Login",
   setup() {
-    const data = ref({
+    const user = ref({
       username: "",
       password: "",
       error: false,
@@ -59,19 +59,19 @@ export default {
     });
 
     function login() {
-      DataService.login(data.value)
+      DataService.login(user.value)
         .then((response) => {
-          data.value.error = false;
+          user.value.error = false;
           console.log(response.data);
         })
         .catch((e) => {
-          data.value.error = true;
-          data.value.errorMsg = e.response.data.message;
+          user.value.error = true;
+          user.value.errorMsg = e.response.data.message;
           console.warn(e.response.data.message);
         });
     }
     return {
-      data,
+      user,
       login,
     };
   },

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 // const mysql = require("mysql");
 // const UserModel = require("../models/user");
 const db = require("../config/database");
@@ -22,18 +22,20 @@ router.post("/login", function (req, res) {
   if (username && password) {
     // Retrive user data
     return db
-      .query("SELECT * FROM accounts WHERE username = '" + username + "'")
+      .query("SELECT * FROM accounts WHERE username = '" + username + "'", {
+        type: db.QueryTypes.SELECT,
+      })
       .then((result) => {
         // No result is found
-        if (result[0].length === 0) {
+        if (result.length === 0) {
           return res.status(404).send({ message: "User Not Found" });
-        } else if (result.length > 0 && result[0][0].password === password) {
+        } else if (result.length > 0 && result[0].password === password) {
           // Signed using secret key
-          const token = jwt.sign({ id: result[0][0].username }, "secret");
+          const token = jwt.sign({ id: result[0].username }, "secret");
           // Store token as cookie
           res.cookie("jwt", token, {
             httpOnly: true,
-            maxAge: 15 * 1000,
+            maxAge: 10 * 1000,
           });
           res.send({ message: "success" });
         } else {
@@ -51,21 +53,33 @@ router.post("/login", function (req, res) {
 // http://localhost:8080/api/auth
 router.get("/auth", (req, res) => {
   const cookie = req.cookies["jwt"];
-  const claims = jwt.verify(cookie, "secret");
-  if (!claims) {
-    return res.status(401).send({
-      message: "unauthenticated",
-    });
-  } else {
-    return db
-      .query("SELECT * FROM accounts WHERE username = '" + claims.id + "'")
-      .then((result) => {
-        res.send(result[0][0]);
+  try {
+    const claims = jwt.verify(cookie, "secret");
+    if (!claims) {
+      return res.status(401).send({
+        message: "unauthenticated",
       });
+    } else {
+      return db
+        .query("SELECT * FROM accounts WHERE username = '" + claims.id + "'", {
+          type: db.QueryTypes.SELECT,
+        })
+        .then((result) => {
+          // res.send(result[0].username);
+          return res.send({
+            message: "authenticated",
+            user: result,
+          });
+        });
+    }
+  } catch {
+    return res.send({
+      message: "JWT is not provided",
+    });
   }
 });
 
-// http://localhost:8080/logout
+// http://localhost:1000/logout
 router.post("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 0 });
   res.send({

@@ -2,7 +2,8 @@ const router = require("express").Router();
 // const bcrypt = require("bcryptjs");
 // const mysql = require("mysql");
 // const UserModel = require("../models/user");
-const db = require("../config/database");
+const userDB = require("../config/userDB");
+const grabDB = require("../config/grabDB");
 const jwt = require("jsonwebtoken");
 
 // Connect to user account MySQL database
@@ -21,9 +22,9 @@ router.post("/login", function (req, res) {
   // Ensure the input fields exists and are not empty
   if (username && password) {
     // Retrive user data
-    return db
+    return userDB
       .query("SELECT * FROM accounts WHERE username = '" + username + "'", {
-        type: db.QueryTypes.SELECT,
+        type: userDB.QueryTypes.SELECT,
       })
       .then((result) => {
         // No result is found
@@ -60,9 +61,9 @@ router.get("/auth", (req, res) => {
         message: "unauthenticated",
       });
     } else {
-      return db
+      return userDB
         .query("SELECT * FROM accounts WHERE username = '" + claims.id + "'", {
-          type: db.QueryTypes.SELECT,
+          type: userDB.QueryTypes.SELECT,
         })
         .then((result) => {
           // res.send(result[0].username);
@@ -85,6 +86,16 @@ router.post("/logout", (req, res) => {
   res.send({
     message: "Logout Success",
   });
+});
+
+// http://localhost:1000/db
+router.post("/db", (req, res) => {
+  return grabDB
+      .query("SELECT * FROM transactions WHERE id<200", {
+        type: userDB.QueryTypes.SELECT,
+      }).then((result)=>{
+        res.send(result)
+      })
 });
 
 module.exports = router;

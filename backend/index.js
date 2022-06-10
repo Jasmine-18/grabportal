@@ -1,7 +1,7 @@
 const express = require("express");
 const router = require("./routes/routes");
 const cors = require("cors");
-const db = require("./config/database")
+const userDB = require("./config/userDB")
 const cookieParser = require("cookie-parser");
 
 app = express();
@@ -22,4 +22,4 @@ app.get("/", (req, res) => {
 app.use("/api", router);
 
 app.listen(1000);
-db.sync();
+userDB.sync();

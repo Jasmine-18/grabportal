@@ -6,9 +6,11 @@
                     Dashboard
                 </h1>
             </div>
+
             <!-- grid wrapper card -->
             <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-2 mt-5">
-                <!-- card  -->
+
+                <!-- Total payouts card  -->
                 <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
                     <div class="block p-2 w-full">
                         <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
@@ -18,6 +20,8 @@
                     </div>
                 </div>
                 <!-- end card -->
+
+                <!-- Total sales card  -->
                 <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
                     <div class="block p-2 w-full">
                         <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
@@ -27,6 +31,8 @@
                     </div>
                 </div>
                 <!-- end card -->
+
+                <!-- Total customers card  -->
                 <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
                     <div class="block p-2 w-full">
                         <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
@@ -40,6 +46,7 @@
                 <!-- end card -->
             </div>
             <!-- end wrapper card -->
+
             <!-- Total Transactions Chart -->
             <div class="mt-2 lg:flex block lg:gap-2">
                 <div class="bg-white dark:bg-gray-800 p-5 w-full rounded-md box-border shadow">
@@ -82,6 +89,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Transaction History Chart-->
             <div class="mt-2 bg-white dark:bg-gray-800 p-5 w-full rounded-md box-border shadow">
                 <h2 class="font-bold text-lg text-gray-800 dark:text-gray-200">

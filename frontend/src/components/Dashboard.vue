@@ -2,15 +2,55 @@
     <div class=" h-screen bg-slate-300">
         <div class="dashboard p-4">
             <div class="mt-5 w-full">
-                <h1 class="text-2xl text-black text-black font-medium">
+                <h1 class="text-2xl text-black font-medium">
                     Dashboard
                 </h1>
             </div>
 
+            <!-- grid wrapper card -->
+            <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:gap-2 mt-5">
+
+                <!-- Total payouts card  -->
+                <div class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex">
+                    <div class="block p-2 w-full">
+                        <p class="font-semibold text-white text-xl">
+                            {{ totalPayout }}
+                        </p>
+                        <h2 class="font-normal text-gray-400 text-md mt-1">Total Payouts</h2>
+                    </div>
+                </div>
+                <!-- end card -->
+
+                <!-- Total sales card  -->
+                <div class="card bg-gray-800 w-full rounded-md p-5 shadow flex">
+                    <div class="block p-2 w-full">
+                        <p class="font-semibold text-white text-xl">
+                            {{ totalTransaction }}
+                        </p>
+                        <h2 class="font-normal text-gray-400 text-md mt-1">Total Transactions</h2>
+                    </div>
+                </div>
+                <!-- end card -->
+
+                <!-- Total customers card  -->
+                <div class="card bg-gray-800 w-full rounded-md p-5 shadow flex">
+                    <div class="block p-2 w-full">
+                        <p class="font-semibold text-white text-xl">
+                            {{ totalCustomer }}
+                        </p>
+                        <h2 class="font-normal text-gray-400 text-md mt-1">
+                            Total Customers
+                        </h2>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end wrapper card -->
+
             <!-- Total Transactions Chart -->
             <div class="mt-2 lg:flex block lg:gap-2">
-                <div class="mt-2 bg-white bg-gray-800 p-5 w-full rounded-md box-border shadow">
-                    <h2 class="font-bold text-lg text-gray-800 text-gray-200">
+                <div class="mt-2 bg-gray-800 p-5 w-full rounded-md box-border shadow">
+                    <h2 class="font-bold text-lg text-white">
                         Total Transactions
                     </h2>
                     <p class="text-gray-400 font-lexend font-normal">
@@ -39,46 +79,6 @@
                     <hr />
                 </div>
             </div>
-
-            <!-- grid wrapper card -->
-            <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:gap-2 mt-5">
-
-                <!-- Total payouts card  -->
-                <div class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex">
-                    <div class="block p-2 w-full">
-                        <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
-                            RM 12,345
-                        </p>
-                        <h2 class="font-normal text-gray-400 text-md mt-1">Total Payouts</h2>
-                    </div>
-                </div>
-                <!-- end card -->
-
-                <!-- Total sales card  -->
-                <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
-                    <div class="block p-2 w-full">
-                        <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
-                            256
-                        </p>
-                        <h2 class="font-normal text-gray-400 text-md mt-1">Total Sales</h2>
-                    </div>
-                </div>
-                <!-- end card -->
-
-                <!-- Total customers card  -->
-                <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
-                    <div class="block p-2 w-full">
-                        <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
-                            10,000
-                        </p>
-                        <h2 class="font-normal text-gray-400 text-md mt-1">
-                            Total Customers
-                        </h2>
-                    </div>
-                </div>
-                <!-- end card -->
-            </div>
-            <!-- end wrapper card -->
         </div>
     </div>
 </template>
@@ -88,54 +88,54 @@
 import { onMounted, ref } from "vue";
 import DataService from "../services/DataService";
 export default {
-  setup() {
-    const filter = ref({
-      dateFilter: "2021-08-09",
-      denoFIlter: "MYR",
-      statusFilter: "SUCCESS",
-    });
-    const totalAmount = ref({});
-    const totalTransaction = ref("null");
-    const totalCustomer = ref("null");
-    const totalPayout = ref("null");
-    const todayTransaction = ref({});
+    setup() {
+        const filter = ref({
+            dateFilter: "2021-08-09",
+            denoFIlter: "MYR",
+            statusFilter: "SUCCESS",
+        });
+        const totalAmount = ref({});
+        const totalTransaction = ref("null");
+        const totalCustomer = ref("null");
+        const totalPayout = ref("null");
+        const todayTransaction = ref({});
 
-    function getTotalAmount() {
-      DataService.getTotalAmount(filter.value)
-        .then((response) => {
-          totalAmount.value = response.data;
-          totalTransaction.value = totalAmount.value[0].totalTransaction;
-          totalPayout.value = totalAmount.value[1].totalPayout;
-          totalCustomer.value = totalAmount.value[2].totalCustomer;
-        })
-        .catch((e) => {
-          console.warn(e);
+        function getTotalAmount() {
+            DataService.getTotalAmount(filter.value)
+                .then((response) => {
+                    totalAmount.value = response.data;
+                    totalTransaction.value = totalAmount.value[0].totalTransaction;
+                    totalPayout.value = totalAmount.value[1].totalPayout;
+                    totalCustomer.value = totalAmount.value[2].totalCustomer;
+                })
+                .catch((e) => {
+                    console.warn(e);
+                });
+        }
+        function getTodayTransaction() {
+            DataService.getTodayTransaction()
+                .then((response) => {
+                    todayTransaction.value = response.data;
+                    console.log(todayTransaction.value);
+                })
+                .catch((e) => {
+                    console.warn(e);
+                });
+        }
+        onMounted(() => {
+            getTotalAmount();
+            getTodayTransaction();
         });
-    }
-    function getTodayTransaction() {
-      DataService.getTodayTransaction()
-        .then((response) => {
-          todayTransaction.value = response.data;
-          console.log(todayTransaction.value);
-        })
-        .catch((e) => {
-          console.warn(e);
-        });
-    }
-    onMounted(() => {
-      getTotalAmount();
-      getTodayTransaction();
-    });
-    return {
-      filter,
-      totalAmount,
-      totalTransaction,
-      totalCustomer,
-      totalPayout,
-      todayTransaction,
-      getTotalAmount,
-      getTodayTransaction,
-    };
-  },
+        return {
+            filter,
+            totalAmount,
+            totalTransaction,
+            totalCustomer,
+            totalPayout,
+            todayTransaction,
+            getTotalAmount,
+            getTodayTransaction,
+        };
+    },
 };
 </script>

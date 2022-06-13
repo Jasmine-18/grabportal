@@ -80,7 +80,7 @@ router.get("/auth", (req, res) => {
   }
 });
 
-// http://localhost:1000/logout
+// http://localhost:1000/api/logout
 router.post("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 0 });
   res.send({
@@ -88,14 +88,100 @@ router.post("/logout", (req, res) => {
   });
 });
 
-// http://localhost:1000/db
+// http://localhost:1000/api/db
 router.post("/db", (req, res) => {
   return grabDB
-      .query("SELECT * FROM transactions WHERE id<200", {
+    .query("SELECT * FROM transactions WHERE id<200", {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      res.send(result);
+    });
+});
+
+// http://localhost:1000/api/dataToday
+router.post("/dataToday", (req, res) => {
+  return grabDB
+    .query(
+      "SELECT SUM(amount_total) FROM transactions WHERE created_at LIKE '2021-03-30%'",
+      {
         type: userDB.QueryTypes.SELECT,
-      }).then((result)=>{
-        res.send(result)
-      })
+      }
+    )
+    .then((result) => {
+      res.send(result);
+    });
+});
+
+// http://localhost:1000/api/totalAmountFilter
+router.post("/totalAmountFilter", (req, res) => {
+  let queryResult = [];
+  let dateFilter = req.body.dateFilter;
+  let denoFilter = req.body.denoFilter;
+  let statusFilter = req.body.statusFilter;
+  let totalPayoutQuery = "SELECT SUM(amount_total) FROM transactions WHERE";
+  let totalCustomerQuery =
+    "SELECT COUNT(DISTINCT user_id) FROM transactions WHERE";
+  let totalTransactionQuery =
+    "SELECT COUNT(DISTINCT id) FROM transactions WHERE";
+  // date filter is required for every query
+  if (dateFilter) {
+    totalPayoutQuery += " created_at LIKE '" + dateFilter + "%'";
+    totalCustomerQuery += " created_at LIKE '" + dateFilter + "%'";
+    totalTransactionQuery += " created_at LIKE '" + dateFilter + "%'";
+  }
+  if (denoFilter) {
+    totalPayoutQuery += " AND currency_id = '" + denoFilter + "'";
+    totalCustomerQuery += " AND currency_id = '" + denoFilter + "'";
+    totalTransactionQuery += " AND currency_id = '" + denoFilter + "'";
+  }
+  if (statusFilter) {
+    totalPayoutQuery += " AND status= '" + statusFilter + "'";
+    totalCustomerQuery += " AND status= '" + statusFilter + "'";
+    totalTransactionQuery += " AND status= '" + statusFilter + "'";
+  }
+
+  grabDB
+    .query(totalTransactionQuery, {
+      type: userDB.QueryTypes.SELECT,
+
+    })
+    .then((result) => {
+      queryResult[0] = result[0];
+      
+    });
+  grabDB
+    .query(totalPayoutQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      // res.send(result[0]);
+      queryResult[1] = result[0];
+      res.send(queryResult);
+    });
+  // grabDB
+  //   .query(totalCustomerQuery, {
+  //     type: userDB.QueryTypes.SELECT,
+  //   })
+  //   .then((result) => {
+  //     // res.send(result[0]);
+  //     queryResult += result[0];
+  //     res.send(queryResult);
+  //   });
+});
+
+// http://localhost:1000/api/
+router.post("/dataToday", (req, res) => {
+  return grabDB
+    .query(
+      "SELECT SUM(amount_total) FROM transactions WHERE created_at LIKE '2021-03-30%'",
+      {
+        type: userDB.QueryTypes.SELECT,
+      }
+    )
+    .then((result) => {
+      res.send(result);
+    });
 });
 
 module.exports = router;

@@ -12,5 +12,8 @@ class DataService {
   getTotalAmount(filter){
     return http.post("/dashboard/totalFilter",filter)
   }
+  getTodayTransaction(){
+    return http.post("/history/todayTransaction")
+  }
 }
 export default new DataService();

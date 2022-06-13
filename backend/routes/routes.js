@@ -99,11 +99,11 @@ router.post("/db", (req, res) => {
     });
 });
 
-// http://localhost:1000/api/dataToday
-router.post("/dataToday", (req, res) => {
+// http://localhost:1000/api/history/todayTransaction
+router.post("/history/todayTransaction", (req, res) => {
   return grabDB
     .query(
-      "SELECT SUM(amount_total) FROM transactions WHERE created_at LIKE '2021-03-30%'",
+      "SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'",
       {
         type: userDB.QueryTypes.SELECT,
       }
@@ -132,9 +132,9 @@ router.post("/dashboard/totalFilter", (req, res) => {
     totalTransactionQuery += " created_at LIKE '" + dateFilter + "%'";
   }
   if (denoFilter) {
-    totalPayoutQuery += " AND currency_id = '" + denoFilter + "'";
-    totalCustomerQuery += " AND currency_id = '" + denoFilter + "'";
-    totalTransactionQuery += " AND currency_id = '" + denoFilter + "'";
+    totalPayoutQuery += " AND amount_value = '" + denoFilter + "'";
+    totalCustomerQuery += " AND amount_value = '" + denoFilter + "'";
+    totalTransactionQuery += " AND amount_value = '" + denoFilter + "'";
   }
   if (statusFilter) {
     totalPayoutQuery += " AND status= '" + statusFilter + "'";

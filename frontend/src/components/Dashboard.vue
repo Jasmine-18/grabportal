@@ -147,6 +147,17 @@
                 <th scope="col" class="uppercase px-6 py-3">Status</th>
               </tr>
             </thead>
+            <tbody v-for="(data, index) in todayTransaction" :key="index">
+              <tr>
+                <td>{{ data.created_at }}</td>
+                <td>{{ data.id }}</td>
+                <td>{{ data.user_name }}</td>
+                <td>{{ data.user_phone }}</td>
+                <td>{{ data.user_email }}</td>
+                <td>{{ data.amount_total }}</td>
+                <td>{{ data.status }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <div class="wrapper-button mt-3">
@@ -183,6 +194,7 @@ export default {
     const totalTransaction = ref("null");
     const totalCustomer = ref("null");
     const totalPayout = ref("null");
+    const todayTransaction = ref({});
 
     function getTotalAmount() {
       DataService.getTotalAmount(filter.value)
@@ -196,8 +208,19 @@ export default {
           console.warn(e);
         });
     }
+    function getTodayTransaction() {
+      DataService.getTodayTransaction()
+        .then((response) => {
+          todayTransaction.value = response.data;
+          console.log(todayTransaction.value);
+        })
+        .catch((e) => {
+          console.warn(e);
+        });
+    }
     onMounted(() => {
       getTotalAmount();
+      getTodayTransaction();
     });
     return {
       filter,
@@ -205,7 +228,9 @@ export default {
       totalTransaction,
       totalCustomer,
       totalPayout,
+      todayTransaction,
       getTotalAmount,
+      getTodayTransaction,
     };
   },
 };

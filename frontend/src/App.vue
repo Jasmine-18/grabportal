@@ -3,6 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 // import Login from './components/Login.vue'
 // import Dashboard from './components/Dashboard.vue'
+// import History from './components/History.vue'
 </script>
 
 <template>

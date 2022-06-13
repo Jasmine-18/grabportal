@@ -1,45 +1,4 @@
 <template>
-  <div>
-    <div class="dashboard p-4">
-      <div class="mt-5 w-full">
-        <h1 class="text-2xl text-black dark:text-black font-medium">
-          Dashboard
-        </h1>
-      </div>
-
-      <!-- grid wrapper card -->
-      <div
-        class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:grid-cols-2 gap-2 mt-5"
-      >
-        <!-- Total payouts card  -->
-        <div
-          class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex"
-        >
-          <div class="block p-2 w-full">
-            <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
-              {{ totalPayout }}
-            </p>
-            <h2 class="font-normal text-gray-400 text-md mt-1">
-              Total Payouts
-            </h2>
-          </div>
-        </div>
-        <!-- end card -->
-
-        <!-- Total sales card  -->
-        <div
-          class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex"
-        >
-          <div class="block p-2 w-full">
-            <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
-              {{ totalTransaction }}
-            </p>
-            <h2 class="font-normal text-gray-400 text-md mt-1">
-              Total Transaction
-            </h2>
-          </div>
-        </div>
-        <!-- end card -->
 
         <!-- Total customers card  -->
         <div
@@ -58,6 +17,22 @@
       </div>
       <!-- end wrapper card -->
 
+
+                <!-- Total customers card  -->
+                <div class="card bg-white dark:bg-gray-800 w-full rounded-md p-5 shadow flex">
+                    <div class="block p-2 w-full">
+                        <p class="font-semibold text-gray-900 dark:text-gray-200 text-xl">
+                            10,000
+                        </p>
+                        <h2 class="font-normal text-gray-400 text-md mt-1">
+                            Total Customers
+                        </h2>
+                    </div>
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end wrapper card -->
+=======
       <!-- Total Transactions Chart -->
       <div class="mt-2 lg:flex block lg:gap-2">
         <div
@@ -159,6 +134,7 @@
               </tr>
             </tbody>
           </table>
+
         </div>
         <div class="wrapper-button mt-3">
           <select

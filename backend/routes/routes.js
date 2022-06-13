@@ -113,17 +113,18 @@ router.post("/dataToday", (req, res) => {
     });
 });
 
-// http://localhost:1000/api/totalAmountFilter
-router.post("/totalAmountFilter", (req, res) => {
+// http://localhost:1000/api/dashboard/totalFilter
+router.post("/dashboard/totalFilter", (req, res) => {
   let queryResult = [];
   let dateFilter = req.body.dateFilter;
   let denoFilter = req.body.denoFilter;
   let statusFilter = req.body.statusFilter;
-  let totalPayoutQuery = "SELECT SUM(amount_total) FROM transactions WHERE";
+  let totalPayoutQuery =
+    "SELECT SUM(amount_total) AS totalPayout FROM transactions WHERE";
   let totalCustomerQuery =
-    "SELECT COUNT(DISTINCT user_id) FROM transactions WHERE";
+    "SELECT COUNT(DISTINCT user_email) AS totalCustomer FROM transactions WHERE";
   let totalTransactionQuery =
-    "SELECT COUNT(DISTINCT id) FROM transactions WHERE";
+    "SELECT COUNT(*) AS totalTransaction FROM transactions WHERE";
   // date filter is required for every query
   if (dateFilter) {
     totalPayoutQuery += " created_at LIKE '" + dateFilter + "%'";
@@ -144,30 +145,25 @@ router.post("/totalAmountFilter", (req, res) => {
   grabDB
     .query(totalTransactionQuery, {
       type: userDB.QueryTypes.SELECT,
-
     })
     .then((result) => {
       queryResult[0] = result[0];
-      
     });
   grabDB
     .query(totalPayoutQuery, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      // res.send(result[0]);
       queryResult[1] = result[0];
+    });
+  grabDB
+    .query(totalCustomerQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[2] = result[0];
       res.send(queryResult);
     });
-  // grabDB
-  //   .query(totalCustomerQuery, {
-  //     type: userDB.QueryTypes.SELECT,
-  //   })
-  //   .then((result) => {
-  //     // res.send(result[0]);
-  //     queryResult += result[0];
-  //     res.send(queryResult);
-  //   });
 });
 
 // http://localhost:1000/api/

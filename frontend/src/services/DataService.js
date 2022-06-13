@@ -7,7 +7,10 @@ class DataService {
     return http.post("/logout");
   }
   auth() {
-    return http.get(`/auth`);
+    return http.get("/auth");
+  }
+  getTotalAmount(filter){
+    return http.post("/dashboard/totalFilter",filter)
   }
 }
 export default new DataService();

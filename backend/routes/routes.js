@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
 // });
 
 // http://localhost:8080/api/login
-router.post("/login", function (req, res) {
+router.post("/login", function (req, res, next) {
   // Capture the input fields
   let username = req.body.username;
   let password = req.body.password;
@@ -33,12 +33,7 @@ router.post("/login", function (req, res) {
         } else if (result.length > 0 && result[0].password === password) {
           // Signed using secret key
           const token = jwt.sign({ id: result[0].username }, "secret");
-          // Store token as cookie
-          res.cookie("jwt", token, {
-            httpOnly: true,
-            maxAge: 10 * 1000,
-          });
-          res.send({ message: "success" });
+          res.send({ message: "success", token: token });
         } else {
           res.status(403).send({ message: "Incorrect password" });
         }
@@ -47,15 +42,15 @@ router.post("/login", function (req, res) {
     res.send({
       message: "Please enter Username and Password!",
     });
-    res.end();
+    next();
   }
 });
 
 // http://localhost:8080/api/auth
-router.get("/auth", (req, res) => {
-  const cookie = req.cookies["jwt"];
+router.post("/auth", (req, res) => {
+  const token = req.body.token;
   try {
-    const claims = jwt.verify(cookie, "secret");
+    const claims = jwt.verify(token, "secret");
     if (!claims) {
       return res.status(401).send({
         message: "unauthenticated",
@@ -66,16 +61,14 @@ router.get("/auth", (req, res) => {
           type: userDB.QueryTypes.SELECT,
         })
         .then((result) => {
-          // res.send(result[0].username);
           return res.send({
             message: "authenticated",
-            user: result,
           });
         });
     }
-  } catch {
-    return res.send({
-      message: "JWT is not provided",
+  } catch (e) {
+    return res.status(401).send({
+      message: e,
     });
   }
 });
@@ -102,12 +95,9 @@ router.post("/db", (req, res) => {
 // http://localhost:1000/api/history/todayTransaction
 router.post("/history/todayTransaction", (req, res) => {
   return grabDB
-    .query(
-      "SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'",
-      {
-        type: userDB.QueryTypes.SELECT,
-      }
-    )
+    .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
+      type: userDB.QueryTypes.SELECT,
+    })
     .then((result) => {
       res.send(result);
     });
@@ -172,8 +162,7 @@ router.post("/history/filterTransaction", (req, res) => {
   let userPhoneFilter = req.body.dateFilter;
   let denoFilter = req.body.amount;
   let statusFilter = req.body.status;
-  let dataQuery =
-    "SELECT * FROM transactions WHERE";
+  let dataQuery = "SELECT * FROM transactions WHERE";
   // date filter is required for every query
   if (dateFilter) {
     dataQuery += " created_at LIKE '%" + dateFilter + "%'";
@@ -185,7 +174,7 @@ router.post("/history/filterTransaction", (req, res) => {
     dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
   }
   if (denoFilter) {
-    dataQuery += " AND amount_value LIKE '%" + denoFilter + "%'";
+    dataQuery += " AND amount_value = '" + denoFilter + "'";
   }
   if (statusFilter) {
     dataQuery += " AND status LIKE '%" + statusFilter + "%'";

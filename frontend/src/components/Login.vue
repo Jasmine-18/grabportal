@@ -71,16 +71,15 @@ export default {
     function login() {
       DataService.login(user.value)
         .then((response) => {
-          user.value.error = false;
-          console.log(response.data);
+          let token = response.data.token
+          localStorage.setItem("token", token);
           router.push("/dashboard");
         })
         .catch((e) => {
           user.value.error = true;
-          user.value.errorMsg = e.response.data.message;
-          console.warn(e.response.data.message);
+          user.value.errorMsg = e;
+          console.warn(e);
         });
-      
     }
     return {
       user,

@@ -275,7 +275,7 @@
                     >Deno</label
                   >
                   <input
-                    v-model="filter.deno"
+                    v-model="filter.amount"
                     type="text"
                     id="denoFilter"
                     placeholder="30"
@@ -321,10 +321,8 @@
             </div>
           </div>
 
-          <div class="wrapping-table mt-10 overflow-x-scroll">
-            <table
-              class="w-full text-sm text-left text-gray-500 overflow-x-scroll lg:overflow-auto "
-            >
+          <div class="wrapping-table mt-10 overflow-x-scroll lg:overflow-auto">
+            <table class="w-full text-sm text-left text-gray-500">
               <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                   <th
@@ -438,10 +436,10 @@
 
 <script>
 import { onMounted, ref } from "vue";
+import router from "../routes/routes";
 import DataService from "../services/DataService";
 export default {
   setup() {
-    // const countColumnsShow = ref(0);
     const dropDownShow = ref(false);
     const todayTransaction = ref({});
     const selectAll = ref(false);
@@ -464,6 +462,13 @@ export default {
       amount: null,
       status: null,
     });
+    function validateUser() {
+      let token = { token: localStorage.getItem("token") };
+      DataService.auth(token)
+        .catch((e) => {
+          router.push("/deniedAccess");
+        });
+    }
     function getTodayTransaction() {
       DataService.getTodayTransaction()
         .then((response) => {
@@ -500,6 +505,7 @@ export default {
         });
     }
     onMounted(() => {
+      validateUser();
       getTodayTransaction();
     });
     return {
@@ -508,6 +514,7 @@ export default {
       columnsChecked,
       selectAll,
       filter,
+      validateUser,
       filterFunction,
       getTodayTransaction,
       columnsSelectAll,

@@ -27,7 +27,7 @@
                 @click="dropDownShow = !dropDownShow"
                 class="flex items-center p-2 text-indigo-100 bg-indigo-600 rounded-md"
               >
-                <span class="mr-4">Dropdown Menu</span>
+                <span class="mr-4">Columns</span>
                 <svg
                   class="w-5 h-5 text-indigo-100 dark:text-white"
                   xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +47,20 @@
                 v-show="dropDownShow"
                 class="absolute left-0 py-2 mt-2 bg-indigo-500 rounded-md shadow-xl w-44"
               >
+                <div
+                  class="flex block px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-400 hover:text-indigo-100"
+                >
+                  <label class="flex items-center">
+                    <input
+                      class="flex item-center"
+                      type="checkbox"
+                      id="checkbox"
+                      v-model="selectAll"
+                      @click="columnsSelectAll()"
+                    />
+                    <span class="ml-2 text-sm">Select All</span>
+                  </label>
+                </div>
                 <div
                   class="flex block px-4 py-2 text-sm text-indigo-100 hover:bg-indigo-400 hover:text-indigo-100"
                 >
@@ -91,8 +105,7 @@
                       id="checkbox"
                       v-model="columnsChecked.userName"
                       @click="
-                        columnsChecked.userName =
-                          !columnsChecked.userName
+                        columnsChecked.userName = !columnsChecked.userName
                       "
                     />
                     <span class="ml-2 text-sm">Username</span>
@@ -108,8 +121,7 @@
                       id="checkbox"
                       v-model="columnsChecked.userPhone"
                       @click="
-                        columnsChecked.userPhone =
-                          !columnsChecked.userPhone
+                        columnsChecked.userPhone = !columnsChecked.userPhone
                       "
                     />
                     <span class="ml-2 text-sm">User Phone</span>
@@ -125,8 +137,7 @@
                       id="checkbox"
                       v-model="columnsChecked.userEmail"
                       @click="
-                        columnsChecked.userEmail =
-                          !columnsChecked.userEmail
+                        columnsChecked.userEmail = !columnsChecked.userEmail
                       "
                     />
                     <span class="ml-2 text-sm">User Email</span>
@@ -141,10 +152,7 @@
                       type="checkbox"
                       id="checkbox"
                       v-model="columnsChecked.amount"
-                      @click="
-                        columnsChecked.amount =
-                          !columnsChecked.amount
-                      "
+                      @click="columnsChecked.amount = !columnsChecked.amount"
                     />
                     <span class="ml-2 text-sm">Amount</span>
                   </label>
@@ -158,10 +166,7 @@
                       type="checkbox"
                       id="checkbox"
                       v-model="columnsChecked.status"
-                      @click="
-                        columnsChecked.status =
-                          !columnsChecked.status
-                      "
+                      @click="columnsChecked.status = !columnsChecked.status"
                     />
                     <span class="ml-2 text-sm">Status</span>
                   </label>
@@ -193,8 +198,7 @@
                       id="checkbox"
                       v-model="columnsChecked.miStatus"
                       @click="
-                        columnsChecked.miStatus =
-                          !columnsChecked.miStatus
+                        columnsChecked.miStatus = !columnsChecked.miStatus
                       "
                     />
                     <span class="ml-2 text-sm">MI Status</span>
@@ -208,10 +212,10 @@
                       class="flex item-center"
                       type="checkbox"
                       id="checkbox"
-                      v-model="columnsChecked.modeOfPayemnt"
+                      v-model="columnsChecked.modeOfPayment"
                       @click="
-                        columnsChecked.modeOfPayemnt =
-                          !columnsChecked.modeOfPayemnt
+                        columnsChecked.modeOfPayment =
+                          !columnsChecked.modeOfPayment
                       "
                     />
                     <span class="ml-2 text-sm">Mode of Payment</span>
@@ -279,9 +283,27 @@
                   >
                     Status
                   </th>
-                  <th v-if="columnsChecked.miTransactionID" scope="col" class="uppercase px-6 py-3">MI Transaction ID</th>
-                  <th v-if="columnsChecked.miStatus" scope="col" class="uppercase px-6 py-3">MI Status</th>
-                  <th v-if="columnsChecked.modeOfPayment" scope="col" class="uppercase px-6 py-3">Mode of Payment</th>
+                  <th
+                    v-if="columnsChecked.miTransactionID"
+                    scope="col"
+                    class="uppercase px-6 py-3"
+                  >
+                    MI Transaction ID
+                  </th>
+                  <th
+                    v-if="columnsChecked.miStatus"
+                    scope="col"
+                    class="uppercase px-6 py-3"
+                  >
+                    MI Status
+                  </th>
+                  <th
+                    v-if="columnsChecked.modeOfPayment"
+                    scope="col"
+                    class="uppercase px-6 py-3"
+                  >
+                    Mode of Payment
+                  </th>
                 </tr>
               </thead>
               <tbody v-for="(data, index) in todayTransaction" :key="index">
@@ -289,15 +311,21 @@
                   <td v-if="columnsChecked.transactionDate">
                     {{ data.created_at }}
                   </td>
-                  <td v-if="columnsChecked.TransactionID">{{ data.id }}</td>
+                  <td v-if="columnsChecked.transactionID">{{ data.id }}</td>
                   <td v-if="columnsChecked.userName">{{ data.user_name }}</td>
                   <td v-if="columnsChecked.userPhone">{{ data.user_phone }}</td>
                   <td v-if="columnsChecked.userEmail">{{ data.user_email }}</td>
                   <td v-if="columnsChecked.amount">{{ data.amount_total }}</td>
                   <td v-if="columnsChecked.status">{{ data.status }}</td>
-                  <td v-if="columnsChecked.miTransactionID">{{ data.agent_transaction_id }}</td>
-                  <td v-if="columnsChecked.miStatus">{{ data.novati_status }}</td>
-                  <td v-if="columnsChecked.modeOfPayment">{{ data.provider }}</td>
+                  <td v-if="columnsChecked.miTransactionID">
+                    {{ data.agent_transaction_id }}
+                  </td>
+                  <td v-if="columnsChecked.miStatus">
+                    {{ data.novati_status }}
+                  </td>
+                  <td v-if="columnsChecked.modeOfPayment">
+                    {{ data.provider }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -311,7 +339,6 @@
             </button>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -322,8 +349,10 @@ import { onMounted, ref } from "vue";
 import DataService from "../services/DataService";
 export default {
   setup() {
+    const countColumnsShow = ref(0);
     const dropDownShow = ref(false);
     const todayTransaction = ref({});
+    const selectAll = ref(false);
     const columnsChecked = ref({
       transactionDate: true,
       transactionID: true,
@@ -334,7 +363,7 @@ export default {
       status: true,
       miTransactionID: false,
       miStatus: false,
-      modeOfPayemnt: false,
+      modeOfPayment: false,
     });
 
     function getTodayTransaction() {
@@ -347,6 +376,19 @@ export default {
           console.warn(e);
         });
     }
+    function columnsSelectAll() {
+      selectAll.value = !selectAll.value;
+      if (selectAll.value) {
+        //Loop through each key of an columnsChecked and update each
+        Object.keys(columnsChecked.value).forEach(
+          (key) => (columnsChecked.value[key] = true)
+        );
+      } else {
+        Object.keys(columnsChecked.value).forEach(
+          (key) => (columnsChecked.value[key] = false)
+        );
+      }
+    }
     onMounted(() => {
       getTodayTransaction();
     });
@@ -354,7 +396,9 @@ export default {
       dropDownShow,
       todayTransaction,
       columnsChecked,
+      selectAll,
       getTodayTransaction,
+      columnsSelectAll,
     };
   },
 };

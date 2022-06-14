@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-800">
-        <nav class="container px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
+        <nav class="container px-8 py-2 mx-auto md:flex md:justify-between md:items-center">
             <div class="text-xl font-bold text-gray-100 md:text-2xl hover:text-green-500">
                 <img alt="ATX logo" src="../../atx.ico" class="h-20" />
             </div>

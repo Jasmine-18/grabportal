@@ -112,7 +112,6 @@ router.post("/history/todayTransaction", (req, res) => {
       res.send(result);
     });
 });
-
 // http://localhost:1000/api/dashboard/totalFilter
 router.post("/dashboard/totalFilter", (req, res) => {
   let queryResult = [];
@@ -163,6 +162,40 @@ router.post("/dashboard/totalFilter", (req, res) => {
     .then((result) => {
       queryResult[2] = result[0];
       res.send(queryResult);
+    });
+});
+
+// http://localhost:1000/api/history/filterTransaction
+router.post("/history/filterTransaction", (req, res) => {
+  let dateFilter = req.body.transactionDate;
+  let userEmailFilter = req.body.userEmail;
+  let userPhoneFilter = req.body.dateFilter;
+  let denoFilter = req.body.amount;
+  let statusFilter = req.body.status;
+  let dataQuery =
+    "SELECT * FROM transactions WHERE";
+  // date filter is required for every query
+  if (dateFilter) {
+    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
+  }
+  if (userEmailFilter) {
+    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
+  }
+  if (userPhoneFilter) {
+    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
+  }
+  if (denoFilter) {
+    dataQuery += " AND amount_value LIKE '%" + denoFilter + "%'";
+  }
+  if (statusFilter) {
+    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
+  }
+  grabDB
+    .query(dataQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      res.send(result);
     });
 });
 

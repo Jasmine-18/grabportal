@@ -15,5 +15,8 @@ class DataService {
   getTodayTransaction(){
     return http.post("/history/todayTransaction")
   }
+  getFilteredDataList(filter){
+    return http.post("/history/filterTransaction",filter)
+  }
 }
 export default new DataService();

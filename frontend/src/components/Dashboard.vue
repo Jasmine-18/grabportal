@@ -1,5 +1,7 @@
 <template>
+    
     <div class=" h-screen bg-slate-300">
+        <!-- <Navbar/> -->
         <div class="dashboard p-4">
             <div class="mt-5 w-full">
                 <h1 class="text-2xl text-black font-medium">
@@ -38,9 +40,7 @@
                         <p class="font-semibold text-white text-xl">
                             {{ totalCustomer }}
                         </p>
-                        <h2 class="font-normal text-gray-400 text-md mt-1">
-                            Total Customers
-                        </h2>
+                        <h2 class="font-normal text-gray-400 text-md mt-1">Total Customers</h2>
                     </div>
                 </div>
                 <!-- end card -->
@@ -83,11 +83,12 @@
     </div>
 </template>
 
-
 <script>
 import { onMounted, ref } from "vue";
 import DataService from "../services/DataService";
+// import Navbar from "./Navbar.vue"
 export default {
+
     setup() {
         const filter = ref({
             dateFilter: "2021-08-09",

@@ -1,4 +1,5 @@
 <template>
+
   <div class="h-screen bg-slate-300">
     <div class="dashboard p-4">
       <div class="mt-5 w-full">

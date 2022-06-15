@@ -47,8 +47,8 @@ router.post("/login", function (req, res, next) {
 });
 
 // http://localhost:8080/api/auth
-router.post("/auth", (req, res) => {
-  const token = req.body.token;
+router.get("/auth", (req, res) => {
+  const token = req.headers["authorization"];
   try {
     const claims = jwt.verify(token, "secret");
     if (!claims) {
@@ -62,6 +62,7 @@ router.post("/auth", (req, res) => {
         })
         .then((result) => {
           return res.send({
+            user: claims.id,
             message: "authenticated",
           });
         });

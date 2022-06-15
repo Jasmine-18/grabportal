@@ -463,8 +463,12 @@ export default {
       status: null,
     });
     function validateUser() {
-      let token = { token: localStorage.getItem("token") };
-      DataService.auth(token)
+      let token = localStorage.getItem("token");
+      DataService.auth({ headers: { authorization: token } })
+        .then((response) => {
+          console.log(response);
+          console.log(auth.value);
+        })
         .catch((e) => {
           router.push("/deniedAccess");
         });

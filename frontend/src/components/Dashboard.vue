@@ -98,7 +98,6 @@
 import { onMounted, ref } from "vue";
 import router from "../routes/routes";
 import DataService from "../services/DataService";
-// import Navbar from "./Navbar.vue"
 export default {
   setup() {
     const filter = ref({
@@ -125,8 +124,11 @@ export default {
         });
     }
     function validateUser() {
-      let token = { token: localStorage.getItem("token") };
-      DataService.auth(token)
+      let token = localStorage.getItem("token");
+      DataService.auth({ headers: { authorization: token } })
+        .then((response) => {
+          console.log(response);
+        })
         .catch((e) => {
           router.push("/deniedAccess");
         });
@@ -135,7 +137,6 @@ export default {
       DataService.getTodayTransaction()
         .then((response) => {
           todayTransaction.value = response.data;
-          console.log(todayTransaction.value);
         })
         .catch((e) => {
           console.warn(e);

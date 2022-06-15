@@ -6,8 +6,8 @@ class DataService {
   logout() {
     return http.post("/logout");
   }
-  auth(token) {
-    return http.post("/auth", token);
+  auth(headers) {
+    return http.get("/auth",headers);
   }
   getTotalAmount(filter){
     return http.post("/dashboard/totalFilter",filter)

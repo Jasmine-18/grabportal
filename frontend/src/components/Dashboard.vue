@@ -123,7 +123,7 @@ export default {
           console.warn(e);
         });
     }
-    function validateUser() {
+    function verifyUser() {
       let token = localStorage.getItem("token");
       DataService.auth({ headers: { authorization: token } })
         .then((response) => {
@@ -143,7 +143,7 @@ export default {
         });
     }
     onMounted(() => {
-      validateUser();
+      verifyUser();
       getTotalAmount();
       getTodayTransaction();
     });
@@ -154,7 +154,7 @@ export default {
       totalCustomer,
       totalPayout,
       todayTransaction,
-      validateUser,
+      verifyUser,
       getTotalAmount,
       getTodayTransaction,
     };

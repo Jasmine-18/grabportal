@@ -1,18 +1,8 @@
 const router = require("express").Router();
-// const bcrypt = require("bcryptjs");
-// const mysql = require("mysql");
-// const UserModel = require("../models/user");
 const userDB = require("../config/userDB");
 const grabDB = require("../config/grabDB");
 const jwt = require("jsonwebtoken");
-
-// Connect to user account MySQL database
-// const connection = mysql.createConnection({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database: "grabportallogin",
-// });
+const paginate = require("jw-paginate");
 
 // http://localhost:8080/api/login
 router.post("/login", function (req, res, next) {
@@ -32,7 +22,9 @@ router.post("/login", function (req, res, next) {
           return res.status(404).send({ message: "User Not Found" });
         } else if (result.length > 0 && result[0].password === password) {
           // Signed using secret key
-          const token = jwt.sign({ id: result[0].username }, "secret");
+          const token = jwt.sign({ id: result[0].username }, "secret", {
+            expiresIn: "2h", // expires in 2 hours
+          });
           res.send({ message: "success", token: token });
         } else {
           res.status(403).send({ message: "Incorrect password" });
@@ -201,6 +193,37 @@ router.post("/dataToday", (req, res) => {
     .then((result) => {
       res.send(result);
     });
+});
+
+// paged items route
+router.get("/items/:page/", async (req, res, next) => {
+  // example array of 150 items to be paged
+  let items = [];
+  // var result = [];
+  // var keys = Object.keys(json);
+
+  await grabDB
+    .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((response) => {
+      // keys = Object.keys(response);
+      items = Object.entries(response);
+    });
+
+  // get page from query params or default to first page
+  const page = parseInt(req.params.page) || 1;
+
+  // get pager object for specified page
+  const pageSize = 2;
+  const pager = paginate(items.length, page, pageSize);
+
+  // get page of items from items array
+  const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+  // console.log(pageOfItems[0][1])
+
+  // return pager object and current page of items
+  return res.send({ pager, pageOfItems });
 });
 
 module.exports = router;

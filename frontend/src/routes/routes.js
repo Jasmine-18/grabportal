@@ -4,6 +4,7 @@ import Login from '../components/Login.vue'
 import Dashboard from '../components/Dashboard.vue'
 import History from '../components/History.vue'
 import DeniedAccess from '../components/DeniedAccess.vue'
+import test from '../components/test.vue'
 
 const routes = [
   {
@@ -28,6 +29,14 @@ const routes = [
     path: '/deniedAccess',
     name: "Denied Access",
     component: DeniedAccess,
+    meta: {
+      hideNavbar: true,
+    }
+  },
+  {
+    path: '/test',
+    name: "Test",
+    component: test,
     meta: {
       hideNavbar: true,
     }

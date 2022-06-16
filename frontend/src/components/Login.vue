@@ -68,10 +68,21 @@ export default {
     });
     const router = useRouter();
     const route = useRoute();
+    // function validateUser() {
+    //   let token = localStorage.getItem("token");
+    //   DataService.auth({ headers: { authorization: token } })
+    //     .then((response) => {
+    //       router.push("/dashboard");
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //       // router.push("/deniedAccess");
+    //     });
+    // }
     function login() {
       DataService.login(user.value)
         .then((response) => {
-          let token = response.data.token
+          let token = response.data.token;
           localStorage.setItem("token", token);
           router.push("/dashboard");
         })
@@ -85,6 +96,7 @@ export default {
       user,
       router,
       route,
+      // validateUser,
       login,
     };
   },

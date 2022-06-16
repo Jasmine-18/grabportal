@@ -1,5 +1,8 @@
 import http from "../http-common";
 class DataService {
+  getAll(page) {
+    return http.get(`/items/${page}`);
+  }
   login(user) {
     return http.post("/login", user);
   }

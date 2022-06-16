@@ -14,7 +14,7 @@
 
         <!-- The title/main text right under the images -->
         <h1 class="text-white text-xl m-10 font-bold">
-          Unauthorised. Please login.
+          Unauthenticated. Please login.
         </h1>
 
         <!-- The username input box -->

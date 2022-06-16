@@ -196,26 +196,53 @@ router.post("/dataToday", (req, res) => {
 });
 
 // paged items route
-router.get("/items/:page/", async (req, res, next) => {
+router.post("/items/:page/", async (req, res, next) => {
   // example array of 150 items to be paged
   let items = [];
-  // var result = [];
-  // var keys = Object.keys(json);
-
+  let dateFilter = req.body.transactionDate;
+  let userEmailFilter = req.body.userEmail;
+  let userPhoneFilter = req.body.userPhone;
+  let denoFilter = req.body.deno;
+  let statusFilter = req.body.status;
+  let dataQuery = "SELECT * FROM transactions WHERE";
+  // date filter is required for every query
+  if (dateFilter) {
+    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
+  }
+  if (userEmailFilter) {
+    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
+  }
+  if (userPhoneFilter) {
+    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
+  }
+  if (denoFilter) {
+    dataQuery += " AND amount_value = '" + denoFilter + "'";
+  }
+  if (statusFilter) {
+    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
+  }
   await grabDB
-    .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
+    .query(dataQuery, {
       type: userDB.QueryTypes.SELECT,
     })
-    .then((response) => {
-      // keys = Object.keys(response);
-      items = Object.entries(response);
+    .then((result) => {
+      items = Object.entries(result);
     });
+
+  // await grabDB
+  //   .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
+  //     type: userDB.QueryTypes.SELECT,
+  //   })
+  //   .then((response) => {
+  //     // keys = Object.keys(response);
+  //     items = Object.entries(response);
+  //   });
 
   // get page from query params or default to first page
   const page = parseInt(req.params.page) || 1;
 
   // get pager object for specified page
-  const pageSize = 2;
+  const pageSize = 50;
   const pager = paginate(items.length, page, pageSize);
 
   // get page of items from items array

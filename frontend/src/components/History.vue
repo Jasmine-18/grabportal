@@ -71,9 +71,10 @@
                 <select
                   v-model="filter.deno"
                   id="denoFilter"
+                  name="Choose a deno"
                   class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
                 >
-                  <!-- <option selected>Choose a deno</option> -->
+                  <option value="null" selected>Choose a deno</option>
                   <option value="30">30</option>
                   <option value="50">50</option>
                   <option value="100">100</option>
@@ -92,7 +93,7 @@
                   id="statusFilter"
                   class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
                 >
-                  <!-- <option selected>Choose a status</option> -->
+                  <option value="null" selected>Choose a status</option>
                   <option value="SUCCESS">Success</option>
                   <option value="FAILED">Failed</option>
                   <option value="PENDING">Pending</option>
@@ -157,43 +158,25 @@
           </svg>
         </button>
 
-        <!-- Resend button with mail icon  -->
-        <button
-          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
-        >
+        <!-- Resend button with mail icon 
+        <button class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
           <span class="mr-2 font-bold">Resend</span>
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-            />
-            clip-rule="evenodd" />
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              clip-rule="evenodd" />
           </svg>
         </button>
 
-        <!-- Repush button with push icon -->
-        <button
-          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
-        >
+        Repush button with push icon 
+        <button class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
           <span class="mr-2 font-bold">Repush</span>
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
               d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd" />
           </svg>
-        </button>
+        </button> -->
 
         <!-- Download button with download icon -->
         <!-- Add download as ".csv" and ".xlsx" feature -->
@@ -214,12 +197,12 @@
             />
           </svg>
         </button>
-
         <!-- Dropdown menu -->
+
         <!-- Select All dropdown -->
         <div
           v-show="dropDownShow"
-          class="absolute mt-10 bg-gray-600 rounded-md w-40"
+          class="absolute mt-10 bg-gray-600 rounded-md w-40 z-index: -1"
         >
           <div
             class="flex block px-4 py-2 text-sm text-gray-100 hover:bg-gray-400"
@@ -407,125 +390,319 @@
           </div>
         </div>
       </div>
+      <!-- End of dropdown -->
 
       <!-- Transaction history table starts here -->
-      <div class="">
-        <div class="w-full mt-5 overflow-x-scroll lg:overflow-auto bg-gray-800">
-          <table
-            class="w-full text-sm text-center text-gray-300 bg-gray-800 border-none bg-gray-800"
+      <div>
+        <div
+          class="table-fixed mt-5 w-full overflow-x-scroll lg:overflow-auto bg-gray-800"
+        >
+          <!-- Pagination starts here -->
+          <div
+            class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
           >
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Previous
+              </a>
+              <a
+                href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Next
+              </a>
+            </div>
+            <div
+              class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+            >
+              <div>
+                <p class="text-sm text-gray-700">
+                  Showing
+                  <span class="font-medium">{{ pager.startIndex + 1 }}</span>
+                  to
+                  <span class="font-medium">{{ pager.endIndex }}</span>
+                  of
+                  <span class="font-medium">{{ pager.totalItems }}</span>
+                  results
+                </p>
+              </div>
+              <div>
+                <ul
+                  v-if="pager.pages && pager.pages.length"
+                  class="pagination relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                >
+                  <li
+                    :class="{ disabled: pager.currentPage === 1 }"
+                    class="page-item first-item relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  >
+                    <router-link :to="{ query: { page: 1 } }" class="page-link"
+                      >First</router-link
+                    >
+                  </li>
+                  <li
+                    :class="{ disabled: pager.currentPage === 1 }"
+                    class="page-item previous-item relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  >
+                    <router-link
+                      :to="{ query: { page: pager.currentPage - 1 } }"
+                      class="page-link"
+                      >Previous</router-link
+                    >
+                  </li>
+                  <li
+                    v-for="page in pager.pages"
+                    :key="page"
+                    class="page-item number-item"
+                  >
+                    <router-link
+                      v-if="pager.currentPage === page"
+                      :to="{ query: { page: page } }"
+                      class="page-link z-10 bg-green-600 text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                      >{{ page }}</router-link
+                    >
+                    <router-link
+                      v-else
+                      :to="{ query: { page: page } }"
+                      class="page-link z-10 bg-white border-gray-300 text-gray-500 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                      >{{ page }}</router-link
+                    >
+                  </li>
+                  <li
+                    :class="{
+                      disabled: pager.currentPage === pager.totalPages,
+                    }"
+                    class="page-item next-item relative inline-flex items-center px-2 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  >
+                    <router-link
+                      :to="{ query: { page: pager.currentPage + 1 } }"
+                      class="page-link"
+                      >Next</router-link
+                    >
+                  </li>
+                  <li
+                    :class="{
+                      disabled: pager.currentPage === pager.totalPages,
+                    }"
+                    class="page-item last-item relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                  >
+                    <router-link
+                      :to="{ query: { page: pager.totalPages } }"
+                      class="page-link"
+                      >Last</router-link
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Ends of Pagination -->
+          <table class="w-full text-sm text-center text-gray-300">
             <!-- Content of table -->
             <thead class="text-xs text-gray-200 uppercase">
               <!-- Header/Top row of table -->
-              <tr class=" ">
+              <tr>
                 <th
                   v-if="columnsChecked.transactionDate"
                   scope="col"
-                  class="uppercase px-6 py-3 w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Transaction Date
                 </th>
                 <th
                   v-if="columnsChecked.transactionID"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Transaction ID
                 </th>
                 <th
                   v-if="columnsChecked.userName"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Username
                 </th>
                 <th
                   v-if="columnsChecked.userPhone"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   User Phone
                 </th>
                 <th
                   v-if="columnsChecked.userEmail"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   User Email
                 </th>
                 <th
                   v-if="columnsChecked.amount"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Amount
                 </th>
                 <th
                   v-if="columnsChecked.status"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Status
                 </th>
                 <th
                   v-if="columnsChecked.miTransactionID"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   MI Transaction ID
                 </th>
                 <th
                   v-if="columnsChecked.miStatus"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   MI Status
                 </th>
                 <th
                   v-if="columnsChecked.modeOfPayment"
                   scope="col"
-                  class="uppercase px-6 py-3  w-64"
+                  class="uppercase px-6 py-3"
                 >
                   Mode of Payment
                 </th>
               </tr>
             </thead>
-            <tbody v-for="(data, index) in todayTransaction" :key="index">
-            <tr v-if="index%2===0" class="h-10 bg-gray-700">
+            <tbody v-for="(item, index) in pageOfItems" :key="index">
+              <tr
+                class="hover:bg-gray-500 bg-slate-600 h-10"
+                v-if="index % 2 === 0"
+              >
                 <td v-if="columnsChecked.transactionDate">
-                  {{ data.created_at }}
+                  {{ item[1].created_at }}
                 </td>
-                <td v-if="columnsChecked.transactionID">
-                  {{ data.id }}
+                <td v-if="columnsChecked.transactionID">{{ item[1].id }}</td>
+                <td v-if="columnsChecked.userName">{{ item[1].user_name }}</td>
+                <td v-if="columnsChecked.userPhone">
+                  {{ item[1].user_phone }}
                 </td>
-                <td v-if="columnsChecked.userName">{{ data.user_name }}</td>
-                <td v-if="columnsChecked.userPhone">{{ data.user_phone }}</td>
-                <td v-if="columnsChecked.userEmail">{{ data.user_email }}</td>
-                <td v-if="columnsChecked.amount">{{ data.amount_total }}</td>
-                <td v-if="columnsChecked.status">{{ data.status }}</td>
+                <td v-if="columnsChecked.userEmail">
+                  {{ item[1].user_email }}
+                </td>
+                <td v-if="columnsChecked.amount">{{ item[1].amount_total }}</td>
+                <td v-if="columnsChecked.status">{{ item[1].status }}</td>
                 <td v-if="columnsChecked.miTransactionID">
-                  {{ data.agent_transaction_id }}
+                  {{ item[1].agent_transaction_id }}
                 </td>
-                <td v-if="columnsChecked.miStatus">{{ data.novati_status }}</td>
-                <td v-if="columnsChecked.modeOfPayment">{{ data.provider }}</td>
+                <td v-if="columnsChecked.miStatus">
+                  {{ item[1].novati_status }}
+                </td>
+                <td v-if="columnsChecked.modeOfPayment">
+                  {{ item[1].provider }}
+                </td>
+                <td>
+                  <button
+                    class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
+                  >
+                    <span class="font-bold">Resend</span>
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                      />
+                      clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="flex items-center mr-2 p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
+                  >
+                    <span class="font-bold">Repush</span>
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </td>
               </tr>
-              <tr v-else class="h-10 bg-gray-500">
+              <tr class="hover:bg-gray-500 bg-slate-700 h-10" v-else>
                 <td v-if="columnsChecked.transactionDate">
-                  {{ data.created_at }}
+                  {{ item[1].created_at }}
                 </td>
-                <td v-if="columnsChecked.transactionID">
-                  {{ data.id }}
+                <td v-if="columnsChecked.transactionID">{{ item[1].id }}</td>
+                <td v-if="columnsChecked.userName">{{ item[1].user_name }}</td>
+                <td v-if="columnsChecked.userPhone">
+                  {{ item[1].user_phone }}
                 </td>
-                <td v-if="columnsChecked.userName">{{ data.user_name }}</td>
-                <td v-if="columnsChecked.userPhone">{{ data.user_phone }}</td>
-                <td v-if="columnsChecked.userEmail">{{ data.user_email }}</td>
-                <td v-if="columnsChecked.amount">{{ data.amount_total }}</td>
-                <td v-if="columnsChecked.status">{{ data.status }}</td>
+                <td v-if="columnsChecked.userEmail">
+                  {{ item[1].user_email }}
+                </td>
+                <td v-if="columnsChecked.amount">{{ item[1].amount_total }}</td>
+                <td v-if="columnsChecked.status">{{ item[1].status }}</td>
                 <td v-if="columnsChecked.miTransactionID">
-                  {{ data.agent_transaction_id }}
+                  {{ item[1].agent_transaction_id }}
                 </td>
-                <td v-if="columnsChecked.miStatus">{{ data.novati_status }}</td>
-                <td v-if="columnsChecked.modeOfPayment">{{ data.provider }}</td>
+                <td v-if="columnsChecked.miStatus">
+                  {{ item[1].novati_status }}
+                </td>
+                <td v-if="columnsChecked.modeOfPayment">
+                  {{ item[1].provider }}
+                </td>
+                <td>
+                  <button
+                    class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
+                  >
+                    <span class="font-bold">Resend</span>
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                      />
+                      clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </td>
+                <td>
+                  <button
+                    class="flex items-center mr-2 p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
+                  >
+                    <span class="font-bold">Repush</span>
+                    <svg
+                      class="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm4.707 3.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L8.414 9H10a3 3 0 013 3v1a1 1 0 102 0v-1a5 5 0 00-5-5H8.414l1.293-1.293z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -537,24 +714,12 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import router from "../routes/routes";
+import { onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import DataService from "../services/DataService";
 export default {
   setup() {
-    // const exampleItems = ref(
-    //   [...Array(150).keys()].map((i) => ({
-    //     id: i + 1,
-    //     name: "Item " + (i + 1),
-    //   }))
-    // );
-
-    const exampleItems = ref();
-    const pageOfItems = ref([]);
-    function onChangePage(pageOfItems) {
-      // update page of items
-      pageOfItems.value = pageOfItems;
-    }
+    // const countColumnsShow = ref(0);
     const dropDownShow = ref(false);
     const todayTransaction = ref({});
     const selectAll = ref(false);
@@ -570,23 +735,27 @@ export default {
       miStatus: false,
       modeOfPayment: false,
     });
+    const route = useRoute();
+    const pager = ref({
+      currentPage: 0,
+      endIndex: 0,
+      endPage: 0,
+      pageSize: 0,
+      pages: 0,
+      startIndex: 0,
+      startPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+    });
+    const pageOfItems = ref([]);
+
     const filter = ref({
       transactionDate: "2021-10-03", //always required, should be set as today
       userPhone: null,
       userEmail: null,
-      amount: null,
+      deno: null,
       status: null,
     });
-    function validateUser() {
-      let token = localStorage.getItem("token");
-      DataService.auth({ headers: { authorization: token } })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((e) => {
-          router.push("/deniedAccess");
-        });
-    }
     function getTodayTransaction() {
       DataService.getTodayTransaction()
         .then((response) => {
@@ -614,16 +783,37 @@ export default {
       if (!filter.value.transactionDate) {
         filter.value.transactionDate = "2021-10-03";
       }
-      DataService.getFilteredDataList(filter.value)
+      DataService.getAll(1, filter.value)
         .then((response) => {
-          todayTransaction.value = response.data;
+          pager.value = response.data["pager"];
+          pageOfItems.value = response.data["pageOfItems"];
         })
         .catch((e) => {
           console.warn(e);
         });
     }
+    //watch(source,callback,option)
+    watch(
+      //getter function return page value
+      () => route.query.page,
+      (page) => {
+        if (page !== pager.value.currentPage) {
+          page = parseInt(page) || 1;
+          DataService.getAll(page, filter.value)
+            .then((response) => {
+              pager.value = response.data["pager"];
+              pageOfItems.value = response.data["pageOfItems"];
+            })
+            .catch((e) => {
+              console.warn(e);
+            });
+        }
+      },
+      {
+        immediate: true,
+      }
+    );
     onMounted(() => {
-      validateUser();
       getTodayTransaction();
     });
     return {
@@ -632,7 +822,8 @@ export default {
       columnsChecked,
       selectAll,
       filter,
-      validateUser,
+      pager,
+      pageOfItems,
       filterFunction,
       getTodayTransaction,
       columnsSelectAll,

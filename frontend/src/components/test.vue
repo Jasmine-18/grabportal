@@ -15,7 +15,7 @@
           <tbody v-for="(item, index) in pageOfItems" :key="index">
             <tr>
               <td>
-                {{ item[1].id }}
+                {{ item[1].created_at }}
               </td>
             </tr>
           </tbody>
@@ -125,15 +125,24 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router'
+import { useRoute } from "vue-router";
 import DataService from "../services/DataService";
 import { ref, watch } from "vue";
 export default {
   setup() {
-    const route = useRoute()
-    const pager = ref({});
+    const route = useRoute();
+    const pager = ref({
+      currentPage: null,
+      endIndex: null,
+      endPage: null,
+      pageSize: null,
+      pages: null,
+      startIndex: null,
+      startPage: null,
+      totalItems: null,
+      totalPages: null,
+    });
     const pageOfItems = ref([]);
-
     //watch(source,callback,option)
     watch(
       //getter function return page value
@@ -141,10 +150,10 @@ export default {
       (page) => {
         if (page !== pager.value.currentPage) {
           page = parseInt(page) || 1;
-          DataService.getAll(page).then((response) => {
+          DataService.getAll(page.value).then((response) => {
             pager.value = response.data["pager"];
             pageOfItems.value = response.data["pageOfItems"];
-            console.log("hl")
+            console.log(pageOfItems.value);
           });
         }
       },

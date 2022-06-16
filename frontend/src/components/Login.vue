@@ -4,7 +4,11 @@
       <div class="bg-gray-800 rounded-md p-5 text-center">
         <!-- Placing the Grab and PayHub images at the top of the Login page -->
         <div class="flex flex-wrap space-x-5 justify-center p-12">
-          <img alt="Grab logo" src="../assets/grab.png" class="h-10 w-auto" />
+          <img 
+            alt="Grab logo" 
+            src="../assets/grab.png" 
+            class="h-10 w-auto" 
+            />
           <img
             alt="PayHub logo"
             src="../assets/payhub.png"
@@ -23,26 +27,26 @@
             v-model="user.username"
             type="text"
             placeholder="Enter your username"
-            class="px-5 py-1 border-solid border-2 rounded-lg"
+            class="text-black px-5 py-1 border-solid border-2 rounded-lg"
           />
         </div>
 
         <!-- The password input box -->
-        <div class="m-5">
+        <div>
           <input
             v-model="user.password"
             type="password"
             placeholder="Enter your password"
-            class="px-5 py-1 border-solid border-2 rounded-lg"
+            class="text-black m-5 px-5 py-1 border-solid border-2 rounded-lg"
           />
         </div>
         <div v-if="user.error">{{ user.errorMsg }}</div>
 
         <!-- The Login button -->
-        <div class="m-5">
+        <div>
           <button
             @click="login()"
-            class="px-3 py-1.5 btn ml-2 border-green-500 bg-green-500 rounded-lg"
+            class="m-5 px-3 py-1.5 btn ml-2 text-bold text-white bg-green-600 hover:bg-green-700 rounded-lg"
           >
             LOGIN
           </button>

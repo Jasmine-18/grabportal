@@ -22,9 +22,9 @@ const routes = [
     path: '/history',
     name: "History",
     component: History
-  },
-
+  }
 ];
+
 const router = createRouter({
   history: createWebHistory(),
   routes,

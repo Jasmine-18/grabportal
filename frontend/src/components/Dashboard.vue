@@ -1,7 +1,5 @@
 <template>
-    
     <div class=" h-screen bg-slate-300">
-        <!-- <Navbar/> -->
         <div class="dashboard p-4">
             <div class="mt-5 w-full">
                 <h1 class="text-2xl text-black font-medium">

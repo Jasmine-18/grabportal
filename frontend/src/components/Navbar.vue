@@ -5,22 +5,23 @@
                 <img alt="ATX logo" src="../../atx.ico" class="h-20" />
             </div>
 
-            <ul class="flex-col text-lg mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-5 md:mt-0">
+            <ul
+                class="flex-col text-lg mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-5 md:mt-0">
                 <hr>
                 <router-link to="/dashboard">
-                <li class="text-gray-100 hover:text-green-500 cursor-pointer">Dashboard</li>
+                    <li class="text-gray-100 hover:text-green-500 cursor-pointer">Dashboard</li>
                 </router-link>
                 <hr>
 
                 <hr>
                 <router-link to="/history">
-                <li class="text-gray-100 hover:text-green-500 cursor-pointer"> Transaction History</li>
+                    <li class="text-gray-100 hover:text-green-500 cursor-pointer">Transaction History</li>
                 </router-link>
                 <hr>
 
                 <hr>
                 <router-link to="/">
-                <li class="text-gray-100 hover:text-red-500 cursor-pointer">Logout</li>
+                    <li class="text-gray-100 hover:text-red-500 cursor-pointer">Logout</li>
                 </router-link>
                 <hr>
             </ul>
@@ -31,7 +32,7 @@
 <script>
 import { ref } from 'vue';
 export default {
-    name:'Navbar',
+    name: 'Navbar',
     setup() {
         let showMenu = ref(false);
         const toggleNav = () => (showMenu.value = !showMenu.value);

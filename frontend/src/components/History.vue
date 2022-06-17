@@ -177,26 +177,27 @@
           </svg>
         </button> -->
 
-        <!-- Download button with download icon -->
-        <!-- Add download as ".csv" and ".xlsx" feature -->
+        <!-- Download buttons with download icon -->
         <button
-          @click="dropDownShowDownload = !dropDownShowDownload"
-          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
-        >
-          <span class="mr-2 font-bold">Download as</span>
-          <svg
-            class="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
+          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+          <span class="mr-2 font-bold">Download as .xlsx</span>
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
               d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-              clip-rule="evenodd"
-            />
+              clip-rule="evenodd" />
           </svg>
         </button>
+        
+        <button
+          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+          <span class="mr-2 font-bold">Download as .csv</span>
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+        <!-- End of download buttons -->
 
         <!-- Dropdown column menu -->
         <!-- Select All dropdown -->
@@ -391,41 +392,6 @@
         </div>
       </div>
       <!-- End of column dropdown -->
-
-      <!-- Dropdown download starts here-->
-      <div
-        v-show="dropDownShowDownload"
-        class="absolute mt-10 bg-gray-600 rounded-md w-40"
-      >
-        <div
-          class="flex block px-4 py-2 text-sm text-gray-100 hover:bg-gray-400"
-        >
-          <label class="flex items-center">
-            <input
-              class="flex item-center"
-              type="checkbox"
-              id="checkbox"
-              v-model="selectAll"
-            />
-            <span class="ml-2 text-sm">.xls</span>
-          </label>
-        </div>
-        <div
-          class="flex block px-4 py-2 text-sm text-gray-100 hover:bg-gray-400"
-        >
-          <label class="flex items-center">
-            <input
-              class="flex item-center"
-              type="checkbox"
-              id="checkbox"
-              v-model="selectAll"
-            />
-            <span class="ml-2 text-sm">.csv</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Dropdown download ends here -->
 
       <!-- Transaction history table starts here -->
       <div>
@@ -759,7 +725,6 @@ export default {
   setup() {
     // const countColumnsShow = ref(0);
     const dropDownShowColumn = ref(false);
-    const dropDownShowDownload = ref(false);
     const todayTransaction = ref({});
     const selectAll = ref(false);
     const columnsChecked = ref({
@@ -868,7 +833,6 @@ export default {
     });
     return {
       dropDownShowColumn,
-      dropDownShowDownload,
       todayTransaction,
       columnsChecked,
       selectAll,

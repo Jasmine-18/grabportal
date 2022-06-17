@@ -66,12 +66,12 @@
 
             <div class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6">
               <button
-                class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10">
+                class="px-2 py-1 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10">
                 Reset
               </button>
 
               <button @click="filterFunction()"
-                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10">
+                class="px-2 py-1 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10">
                 Search
               </button>
             </div>
@@ -83,7 +83,7 @@
       <div class="flex flex-wrap relative space-x-4 mt-5 mb-5 float-right">
         <!-- Dropdown toggle button -->
         <button @click="dropDownShowColumn = !dropDownShowColumn"
-          class="flex items-center p-2 text-white bg-gray-400 hover:bg-gray-500 rounded-md transition ease-in-out duration-200 translate-10">
+          class="flex px-2 py-1 items-center text-white bg-gray-400 hover:bg-gray-500 rounded-md transition ease-in-out duration-200 translate-10">
           <span class="mr-2 font-bold">Filter by Columns</span>
           <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
@@ -94,7 +94,7 @@
 
         <!-- Download buttons with download icon -->
         <button
-          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+          class="flex px-2 py-1 items-center text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
           <span class="mr-2 font-bold">Download as .xlsx</span>
           <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
@@ -104,7 +104,7 @@
         </button>
 
         <button
-          class="flex items-center p-2 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+          class="flex px-2 py-1 items-center text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
           <span class="mr-2 font-bold">Download as .csv</span>
           <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
@@ -385,7 +385,7 @@
 
                 <td>
                   <button
-                    class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+                    class="flex items-center px-2 py-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
                     <span class="font-bold">Resend</span>
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd"
@@ -397,7 +397,7 @@
 
                 <td>
                   <button
-                    class="flex items-center mr-2 p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+                    class="flex items-center mr-2 px-2 py-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
                     <span class="font-bold">Repush</span>
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd"
@@ -443,7 +443,7 @@
 
                 <td>
                   <button
-                    class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+                    class="flex items-center px-2 py-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
                     <span class="font-bold">Resend</span>
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd"
@@ -455,7 +455,7 @@
 
                 <td>
                   <button
-                    class="flex items-center mr-2 p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
+                    class="flex items-center mr-2 px-2 py-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10">
                     <span class="font-bold">Repush</span>
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd"

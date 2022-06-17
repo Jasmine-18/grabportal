@@ -799,7 +799,7 @@ export default {
       pageSize: 0,
       pages: 0,
       startIndex: 0,
-      startPage: 1,
+      startPage: null,
       totalItems: 0,
       totalPages: 0,
     });
@@ -846,7 +846,7 @@ export default {
         filter.value.transactionDate = "2021-10-03";
       }
       loading.value = true;
-      DataService.getAll(1, filter.value)
+      DataService.getAll(pager.value.currentPage, filter.value)
         .then((response) => {
           pager.value = response.data["pager"];
           pageOfItems.value = response.data["pageOfItems"];
@@ -911,6 +911,7 @@ export default {
               console.warn(e);
             });
         }
+        console.log(pager.value.currentPage);
       },
       {
         immediate: true,

@@ -1,18 +1,21 @@
 const router = require("express").Router();
 const userDB = require("../config/userDB");
 const grabDB = require("../config/grabDB");
+const XLSX = require("xlsx");
 const jwt = require("jsonwebtoken");
 const paginate = require("jw-paginate");
+const fastcsv = require("fast-csv");
+const fs = require("fs");
 
 // http://localhost:8080/api/login
-router.post("/login", function (req, res, next) {
+router.post("/login", async  (req, res, next) => {
   // Capture the input fields
   let username = req.body.username;
   let password = req.body.password;
   // Ensure the input fields exists and are not empty
   if (username && password) {
     // Retrive user data
-    return userDB
+    return await userDB
       .query("SELECT * FROM accounts WHERE username = '" + username + "'", {
         type: userDB.QueryTypes.SELECT,
       })
@@ -39,7 +42,7 @@ router.post("/login", function (req, res, next) {
 });
 
 // http://localhost:8080/api/auth
-router.get("/auth", (req, res) => {
+router.get("/auth", async (req, res) => {
   const token = req.headers["authorization"];
   try {
     const claims = jwt.verify(token, "secret");
@@ -48,7 +51,7 @@ router.get("/auth", (req, res) => {
         message: "unauthenticated",
       });
     } else {
-      return userDB
+      return await userDB
         .query("SELECT * FROM accounts WHERE username = '" + claims.id + "'", {
           type: userDB.QueryTypes.SELECT,
         })
@@ -75,8 +78,8 @@ router.post("/logout", (req, res) => {
 });
 
 // http://localhost:1000/api/db
-router.post("/db", (req, res) => {
-  return grabDB
+router.post("/db", async(req, res) => {
+  return await grabDB
     .query("SELECT * FROM transactions WHERE id<200", {
       type: userDB.QueryTypes.SELECT,
     })
@@ -86,8 +89,8 @@ router.post("/db", (req, res) => {
 });
 
 // http://localhost:1000/api/history/todayTransaction
-router.post("/history/todayTransaction", (req, res) => {
-  return grabDB
+router.post("/history/todayTransaction", async (req, res) => {
+  return await grabDB
     .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
       type: userDB.QueryTypes.SELECT,
     })
@@ -96,7 +99,7 @@ router.post("/history/todayTransaction", (req, res) => {
     });
 });
 // http://localhost:1000/api/dashboard/totalFilter
-router.post("/dashboard/totalFilter", (req, res) => {
+router.post("/dashboard/totalFilter", async (req, res) => {
   let queryResult = [];
   let dateFilter = req.body.dateFilter;
   let denoFilter = req.body.denoFilter;
@@ -124,21 +127,21 @@ router.post("/dashboard/totalFilter", (req, res) => {
     totalTransactionQuery += " AND status= '" + statusFilter + "'";
   }
 
-  grabDB
+  await grabDB
     .query(totalTransactionQuery, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
       queryResult[0] = result[0];
     });
-  grabDB
+  await grabDB
     .query(totalPayoutQuery, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
       queryResult[1] = result[0];
     });
-  grabDB
+  await grabDB
     .query(totalCustomerQuery, {
       type: userDB.QueryTypes.SELECT,
     })
@@ -149,7 +152,7 @@ router.post("/dashboard/totalFilter", (req, res) => {
 });
 
 // http://localhost:1000/api/history/filterTransaction
-router.post("/history/filterTransaction", (req, res) => {
+router.post("/history/filterTransaction", async (req, res) => {
   let dateFilter = req.body.transactionDate;
   let userEmailFilter = req.body.userEmail;
   let userPhoneFilter = req.body.dateFilter;
@@ -172,7 +175,7 @@ router.post("/history/filterTransaction", (req, res) => {
   if (statusFilter) {
     dataQuery += " AND status LIKE '%" + statusFilter + "%'";
   }
-  grabDB
+  await grabDB
     .query(dataQuery, {
       type: userDB.QueryTypes.SELECT,
     })
@@ -195,7 +198,7 @@ router.post("/dataToday", (req, res) => {
     });
 });
 
-// paged items route
+// http://localhost:1000/api/items/:page/
 router.post("/items/:page/", async (req, res, next) => {
   // example array of 150 items to be paged
   let items = [];
@@ -251,6 +254,70 @@ router.post("/items/:page/", async (req, res, next) => {
 
   // return pager object and current page of items
   return res.send({ pager, pageOfItems });
+});
+
+// http://localhost:1000/api/export
+router.post("/export", async (req, res) => {
+  let dataExport = [];
+  let csv = req.body.csv;
+  let dateFilter = req.body.transactionDate;
+  let userEmailFilter = req.body.userEmail;
+  let userPhoneFilter = req.body.userPhone;
+  let denoFilter = req.body.deno;
+  let statusFilter = req.body.status;
+  let dataQuery = "SELECT * FROM transactions WHERE";
+  const convertToCSV = () => {
+    const ws = fs.createWriteStream("transactionHistory.csv");
+    fastcsv
+      .write(dataExport, { headers: true })
+      .on("finish", function () {
+        res.send("Write to transactionHistory.csv successfully!");
+      })
+      .pipe(ws);
+  };
+  const convertToExcel = () => {
+    const workSheet = XLSX.utils.json_to_sheet(dataExport);
+    const workBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workBook, workSheet, "dataExport");
+    // Generate buffer
+    XLSX.write(workBook, { bookType: "xlsx", type: "buffer" });
+
+    // Binary string
+    XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
+
+    XLSX.writeFile(workBook, "transactionHistory.xlsx");
+    res.send("Write to transactionHistory.xlsx successfully!");
+  };
+  // date filter is required for every query
+  if (dateFilter) {
+    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
+  }
+  if (userEmailFilter) {
+    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
+  }
+  if (userPhoneFilter) {
+    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
+  }
+  if (denoFilter) {
+    dataQuery += " AND amount_value = '" + denoFilter + "'";
+  }
+  if (statusFilter) {
+    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
+  }
+
+  await grabDB
+    .query(dataQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      dataExport = result;
+    });
+  if (csv) {
+    convertToCSV();
+  } else {
+    convertToExcel();
+  }
 });
 
 module.exports = router;

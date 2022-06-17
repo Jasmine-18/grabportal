@@ -1,0 +1,5 @@
+id,agent_transaction_id,description,currency_id,amount_value,amount_total,amount_cashback,amount_tax,user_id,user_name,user_email,user_dialcode,user_phone,created_at,updated_at,pin,status,product_code,novati_status,provider,bank,is_resubmit,resubmit_at
+111,GB2021033020210330175812,,MYR,50,50,0,0,,,,,81299899575,Wed Mar 31 2021 01:58:12 GMT+0800 (Malaysia Time),Wed Mar 31 2021 01:58:12 GMT+0800 (Malaysia Time),2340,,DGRABP50,,,,0,
+112,GB2021033020210330182121,,MYR,30,30,0,0,,,,,81299899575,Wed Mar 31 2021 02:21:21 GMT+0800 (Malaysia Time),Wed Mar 31 2021 02:21:21 GMT+0800 (Malaysia Time),5830,,DGRABP30,,,,0,
+113,GB2021033020210330185141,,MYR,50,50,0,0,,,,,81299899575,Wed Mar 31 2021 02:51:41 GMT+0800 (Malaysia Time),Wed Mar 31 2021 02:51:41 GMT+0800 (Malaysia Time),2748,,DGRABP50,,,,0,
+114,GB2021033020210330185325,,MYR,50,50,0,0,,,,,81299899575,Wed Mar 31 2021 02:53:25 GMT+0800 (Malaysia Time),Wed Mar 31 2021 02:53:25 GMT+0800 (Malaysia Time),4801,,DGRABP50,,,,0,

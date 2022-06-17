@@ -2,13 +2,14 @@ const router = require("express").Router();
 const userDB = require("../config/userDB");
 const grabDB = require("../config/grabDB");
 const XLSX = require("xlsx");
+const path = require("path");
 const jwt = require("jsonwebtoken");
 const paginate = require("jw-paginate");
 const fastcsv = require("fast-csv");
 const fs = require("fs");
 
 // http://localhost:8080/api/login
-router.post("/login", async  (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   // Capture the input fields
   let username = req.body.username;
   let password = req.body.password;
@@ -77,7 +78,7 @@ router.post("/logout", (req, res) => {
 });
 
 // http://localhost:1000/api/db
-router.post("/db", async(req, res) => {
+router.post("/db", async (req, res) => {
   return await grabDB
     .query("SELECT * FROM transactions WHERE id<200", {
       type: userDB.QueryTypes.SELECT,
@@ -261,7 +262,7 @@ router.post("/items/:page/", async (req, res, next) => {
 // http://localhost:1000/api/export
 router.post("/export", async (req, res) => {
   let dataExport = [];
-  let csv = req.body.csv;
+  let csv = req.body.asCSV;
   let dateFilter = req.body.transactionDate;
   let userEmailFilter = req.body.userEmail;
   let userPhoneFilter = req.body.userPhone;
@@ -273,7 +274,10 @@ router.post("/export", async (req, res) => {
     fastcsv
       .write(dataExport, { headers: true })
       .on("finish", function () {
-        res.send("Write to transactionHistory.csv successfully!");
+        const csvFilePath = path.join(__dirname, "../transactionHistory.csv");
+        res.sendFile(csvFilePath, (err) => {
+          if (err) console.log(err);
+        });
       })
       .pipe(ws);
   };
@@ -290,9 +294,13 @@ router.post("/export", async (req, res) => {
     XLSX.write(workBook, { bookType: "xlsx", type: "binary" });
 
     XLSX.writeFile(workBook, "transactionHistory.xlsx");
-    res.send("Write to transactionHistory.xlsx successfully!");
+    const excelFilePath = path.join(__dirname, "../transactionHistory.xlsx");
+    // console.log(excelFilePath);
+    res.sendFile(excelFilePath, (err) => {
+      if (err) console.log(err);
+    });
   };
-  
+
   // date filter is required for every query
   if (dateFilter) {
     dataQuery += " created_at LIKE '%" + dateFilter + "%'";

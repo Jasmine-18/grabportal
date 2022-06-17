@@ -36,7 +36,8 @@
             class="px-5 py-1 border-solid border-2 rounded-lg"
           />
         </div>
-        <div v-if="user.error">{{ user.errorMsg }}</div>
+       <div class="text-white px-5 py-1 bg-red-400 rounded-lg" v-if="user.error">{{ user.errorMsg }}</div>
+        
 
         <!-- The Login button -->
         <div class="m-5">
@@ -68,29 +69,25 @@ export default {
     });
     const router = useRouter();
     const route = useRoute();
-    // function validateUser() {
-    //   let token = localStorage.getItem("token");
-    //   DataService.auth({ headers: { authorization: token } })
-    //     .then((response) => {
-    //       router.push("/dashboard");
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //       // router.push("/deniedAccess");
-    //     });
-    // }
     function login() {
+      // if (user.value.username && user.value.password) {
       DataService.login(user.value)
         .then((response) => {
+          user.value.error = false;
           let token = response.data.token;
           localStorage.setItem("token", token);
           router.push("/dashboard");
         })
         .catch((e) => {
           user.value.error = true;
-          user.value.errorMsg = e;
+          user.value.errorMsg = e.response.data.message;
           console.warn(e);
         });
+
+      // else{
+      //   user.value.error = false;
+      //   user.value.errorMsg = "Please enter password"
+      // }
     }
     return {
       user,

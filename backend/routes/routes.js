@@ -34,10 +34,9 @@ router.post("/login", async  (req, res, next) => {
         }
       });
   } else {
-    res.send({
+    res.status(404).send({
       message: "Please enter Username and Password!",
     });
-    next();
   }
 });
 

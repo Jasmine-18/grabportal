@@ -759,8 +759,15 @@
               </tr>
             </tbody>
           </table>
+          <div
+            class="flex items-center justify-center text-gray-200"
+            v-if="pageOfItems.length === 0"
+          >
+            No record found
+          </div>
         </div>
       </div>
+
       <!-- Transaction history table ends here -->
     </div>
   </div>
@@ -851,6 +858,7 @@ export default {
           pager.value = response.data["pager"];
           pageOfItems.value = response.data["pageOfItems"];
           loading.value = false;
+          console.log(pageOfItems.value);
         })
         .catch((e) => {
           console.warn(e);
@@ -862,6 +870,7 @@ export default {
       DataService.auth({ headers: { authorization: token } })
         .then((response) => {
           console.log(response);
+          filterFunction();
         })
         .catch((e) => {
           router.push("/deniedAccess");
@@ -911,7 +920,6 @@ export default {
               console.warn(e);
             });
         }
-        console.log(pager.value.currentPage);
       },
       {
         immediate: true,
@@ -920,7 +928,6 @@ export default {
 
     onMounted(() => {
       verifyUser();
-      filterFunction();
     });
 
     return {

@@ -70,7 +70,6 @@ export default {
     const router = useRouter();
     const route = useRoute();
     function login() {
-      // if (user.value.username && user.value.password) {
       DataService.login(user.value)
         .then((response) => {
           user.value.error = false;
@@ -83,17 +82,11 @@ export default {
           user.value.errorMsg = e.response.data.message;
           console.warn(e);
         });
-
-      // else{
-      //   user.value.error = false;
-      //   user.value.errorMsg = "Please enter password"
-      // }
     }
     return {
       user,
       router,
       route,
-      // validateUser,
       login,
     };
   },

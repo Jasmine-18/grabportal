@@ -761,7 +761,7 @@
           </table>
           <div
             class="flex items-center justify-center text-gray-200"
-            v-if="pageOfItems.length === 0"
+            v-if="pageOfItems.length === 0 && !loading"
           >
             No record found
           </div>
@@ -822,18 +822,6 @@ export default {
       asCSV: null,
     });
 
-    function getTodayTransaction() {
-      DataService.getTodayTransaction()
-        .then((response) => {
-          todayTransaction.value = response.data;
-          console.log(todayTransaction.value);
-          loading.value = false;
-        })
-        .catch((e) => {
-          console.warn(e);
-        });
-    }
-
     function columnsSelectAll() {
       selectAll.value = !selectAll.value;
       if (selectAll.value) {
@@ -858,7 +846,6 @@ export default {
           pager.value = response.data["pager"];
           pageOfItems.value = response.data["pageOfItems"];
           loading.value = false;
-          console.log(pageOfItems.value);
         })
         .catch((e) => {
           console.warn(e);
@@ -869,7 +856,6 @@ export default {
       let token = localStorage.getItem("token");
       DataService.auth({ headers: { authorization: token } })
         .then((response) => {
-          console.log(response);
           filterFunction();
         })
         .catch((e) => {
@@ -941,7 +927,6 @@ export default {
       pageOfItems,
       verifyUser,
       filterFunction,
-      getTodayTransaction,
       columnsSelectAll,
       exportData,
     };

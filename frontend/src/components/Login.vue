@@ -4,7 +4,11 @@
       <div class="bg-gray-800 rounded-md p-5 text-center">
         <!-- Placing the Grab and PayHub images at the top of the Login page -->
         <div class="flex flex-wrap space-x-5 justify-center p-12">
-          <img alt="Grab logo" src="../assets/grab.png" class="h-10 w-auto" />
+          <img 
+            alt="Grab logo" 
+            src="../assets/grab.png" 
+            class="h-10 w-auto" 
+          />
           <img
             alt="PayHub logo"
             src="../assets/payhub.png"
@@ -37,7 +41,6 @@
           />
         </div>
        <div class="text-white px-5 py-1 bg-red-400 rounded-lg" v-if="user.error">{{ user.errorMsg }}</div>
-        
 
         <!-- The Login button -->
         <div class="m-5">
@@ -67,8 +70,10 @@ export default {
       error: false,
       errorMsg: "",
     });
+
     const router = useRouter();
     const route = useRoute();
+    
     function login() {
       DataService.login(user.value)
         .then((response) => {

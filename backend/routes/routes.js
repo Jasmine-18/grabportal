@@ -97,6 +97,7 @@ router.post("/history/todayTransaction", async (req, res) => {
       res.send(result);
     });
 });
+
 // http://localhost:1000/api/dashboard/totalFilter
 router.post("/dashboard/totalFilter", async (req, res) => {
   let queryResult = [];
@@ -174,6 +175,7 @@ router.post("/history/filterTransaction", async (req, res) => {
   if (statusFilter) {
     dataQuery += " AND status LIKE '%" + statusFilter + "%'";
   }
+
   await grabDB
     .query(dataQuery, {
       type: userDB.QueryTypes.SELECT,
@@ -223,6 +225,7 @@ router.post("/items/:page/", async (req, res, next) => {
   if (statusFilter) {
     dataQuery += " AND status LIKE '%" + statusFilter + "%'";
   }
+
   await grabDB
     .query(dataQuery, {
       type: userDB.QueryTypes.SELECT,
@@ -274,6 +277,7 @@ router.post("/export", async (req, res) => {
       })
       .pipe(ws);
   };
+
   const convertToExcel = () => {
     const workSheet = XLSX.utils.json_to_sheet(dataExport);
     const workBook = XLSX.utils.book_new();
@@ -288,6 +292,7 @@ router.post("/export", async (req, res) => {
     XLSX.writeFile(workBook, "transactionHistory.xlsx");
     res.send("Write to transactionHistory.xlsx successfully!");
   };
+  
   // date filter is required for every query
   if (dateFilter) {
     dataQuery += " created_at LIKE '%" + dateFilter + "%'";

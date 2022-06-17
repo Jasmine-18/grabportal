@@ -12,7 +12,6 @@ const UserModel = db.define("accounts", {
   email: {
     type: Sequelize.STRING,
   },
-
 });
 
 module.exports = UserModel;

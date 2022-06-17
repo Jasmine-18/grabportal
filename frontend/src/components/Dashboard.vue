@@ -105,6 +105,7 @@ export default {
       denoFilter: "30",
       statusFilter: "SUCCESS",
     });
+
     const totalAmount = ref({});
     const totalTransaction = ref("null");
     const totalCustomer = ref("null");
@@ -123,6 +124,7 @@ export default {
           console.warn(e);
         });
     }
+
     function verifyUser() {
       let token = localStorage.getItem("token");
       DataService.auth({ headers: { authorization: token } })
@@ -133,6 +135,7 @@ export default {
           router.push("/deniedAccess");
         });
     }
+
     function getTodayTransaction() {
       DataService.getTodayTransaction()
         .then((response) => {
@@ -142,11 +145,13 @@ export default {
           console.warn(e);
         });
     }
+
     onMounted(() => {
       verifyUser();
       getTotalAmount();
       getTodayTransaction();
     });
+    
     return {
       filter,
       totalAmount,

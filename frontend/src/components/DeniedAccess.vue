@@ -2,9 +2,13 @@
   <div class="bg-slate-300">
     <div class="flex h-screen justify-center items-center">
       <div class="bg-gray-800 rounded-md p-5 text-center">
-        <!-- Placing the Grab and PayHub images at the top of the Login page -->
+        <!-- Placing the Grab and PayHub images at the top of the Denied Access page -->
         <div class="flex flex-wrap space-x-5 justify-center p-12">
-          <img alt="Grab logo" src="../assets/grab.png" class="h-10 w-auto" />
+          <img 
+            alt="Grab logo" 
+            src="../assets/grab.png" 
+            class="h-10 w-auto" 
+          />
           <img
             alt="PayHub logo"
             src="../assets/payhub.png"
@@ -14,7 +18,7 @@
 
         <!-- The title/main text right under the images -->
         <h1 class="text-white text-xl m-10 font-bold">
-          Unauthenticated. Please login.
+          Access denied, please login to proceed.
         </h1>
 
         <!-- The username input box -->

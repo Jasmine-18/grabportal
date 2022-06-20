@@ -841,7 +841,7 @@ export default {
         filter.value.transactionDate = "2021-10-03";
       }
       loading.value = true;
-      DataService.getAll(pager.value.currentPage, filter.value)
+      DataService.getFilteredData(pager.value.currentPage, filter.value)
         .then((response) => {
           pager.value = response.data["pager"];
           pageOfItems.value = response.data["pageOfItems"];
@@ -856,6 +856,7 @@ export default {
       let token = localStorage.getItem("token");
       DataService.auth({ headers: { authorization: token } })
         .then((response) => {
+          console.log(response.data.message);
           filterFunction();
         })
         .catch((e) => {
@@ -896,7 +897,7 @@ export default {
         if (page !== pager.value.currentPage) {
           page = parseInt(page) || 1;
           loading.value = true;
-          DataService.getAll(page, filter.value)
+          DataService.getFilteredData(page, filter.value)
             .then((response) => {
               pager.value = response.data["pager"];
               pageOfItems.value = response.data["pageOfItems"];

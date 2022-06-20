@@ -31,11 +31,11 @@ router.post("/login", async (req, res, next) => {
           });
           res.send({ message: "success", token: token });
         } else {
-          res.status(403).send({ message: "Incorrect password" });
+          res.status(401).send({ message: "Incorrect password" });
         }
       });
   } else {
-    res.status(404).send({
+    res.status(401).send({
       message: "Please enter Username and Password!",
     });
   }
@@ -71,7 +71,6 @@ router.get("/auth", async (req, res) => {
 
 // http://localhost:1000/api/logout
 router.post("/logout", (req, res) => {
-  res.cookie("jwt", "", { maxAge: 0 });
   res.send({
     message: "Logout Success",
   });
@@ -88,7 +87,7 @@ router.post("/db", async (req, res) => {
     });
 });
 
-// http://localhost:1000/api/history/todayTransaction
+// http://localhost:1000/api/history/getData
 router.post("/history/todayTransaction", async (req, res) => {
   return await grabDB
     .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
@@ -98,9 +97,8 @@ router.post("/history/todayTransaction", async (req, res) => {
       res.send(result);
     });
 });
-
-// http://localhost:1000/api/dashboard/totalFilter
-router.post("/dashboard/totalFilter", async (req, res) => {
+// http://localhost:1000/api/dashboard/getDataByWeek
+router.post("/dashboard/getDataByWeek", async (req, res) => {
   let queryResult = [];
   let dateFilter = req.body.dateFilter;
   let denoFilter = req.body.denoFilter;
@@ -151,9 +149,88 @@ router.post("/dashboard/totalFilter", async (req, res) => {
       res.send(queryResult);
     });
 });
+// http://localhost:1000/api/dashboard/getDataByMonth
+router.post("/dashboard/getDataByMonth", async (req, res) => {
+  let queryResult = [];
+  dateFilter = "2021-03-10";
+  let statusQuery =
+    "SELECT status FROM transactions WHERE created_at LIKE '" +
+    dateFilter +
+    "%'";
+    let amountQuery =
+    "SELECT amount FROM transactions WHERE created_at LIKE '" +
+    dateFilter +
+    "%'";
+    let MIStatusQuery = "SELECT novati_status FROM transactions WHERE created_at LIKE '" +
+    dateFilter +
+    "%'";
+    let modeOfPaymentQuery = "SELECT bank FROM transactions WHERE created_at LIKE '" +
+    dateFilter +
+    "%'";
+    let totaltransactionQuery = "SELECT COUNT(*) FROM transactions WHERE created_at LIKE '" +
+    dateFilter +
+    "%'";
 
-// http://localhost:1000/api/history/filterTransaction
-router.post("/history/filterTransaction", async (req, res) => {
+  await grabDB
+    .query(statusQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[0] = result[0];
+    });
+  await grabDB
+    .query(totalPayoutQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[1] = result[0];
+    });
+  await grabDB
+    .query(totalCustomerQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[2] = result[0];
+      res.send(queryResult);
+    });
+});
+
+// http://localhost:1000/api/dashboard/getDataOverall
+router.post("/dashboard/getDataOverall", async (req, res) => {
+  let queryResult = [];
+  let totalPayoutQuery =
+    "SELECT SUM(amount_total) AS totalPayout FROM transactions";
+  let totalCustomerQuery =
+    "SELECT COUNT(DISTINCT user_email) AS totalCustomer FROM transactions";
+  let totalTransactionQuery =
+    "SELECT COUNT(*) AS totalTransaction FROM transactions";
+
+  await grabDB
+    .query(totalTransactionQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[0] = result[0];
+    });
+  await grabDB
+    .query(totalPayoutQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[1] = result[0];
+    });
+  await grabDB
+    .query(totalCustomerQuery, {
+      type: userDB.QueryTypes.SELECT,
+    })
+    .then((result) => {
+      queryResult[2] = result[0];
+      res.send(queryResult);
+    });
+});
+
+// http://localhost:1000/api/history/getFilteredData
+router.post("/history/getFilteredData", async (req, res) => {
   let dateFilter = req.body.transactionDate;
   let userEmailFilter = req.body.userEmail;
   let userPhoneFilter = req.body.dateFilter;
@@ -200,8 +277,8 @@ router.post("/dataToday", (req, res) => {
     });
 });
 
-// http://localhost:1000/api/items/:page/
-router.post("/items/:page/", async (req, res, next) => {
+// http://localhost:1000/api/getFilteredData/:page/
+router.post("/getFilteredData/:page/", async (req, res, next) => {
   // example array of 150 items to be paged
   let items = [];
   let dateFilter = req.body.transactionDate;

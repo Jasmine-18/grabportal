@@ -149,48 +149,109 @@ router.post("/dashboard/getDataByWeek", async (req, res) => {
       res.send(queryResult);
     });
 });
-// http://localhost:1000/api/dashboard/getDataByMonth
-router.post("/dashboard/getDataByMonth", async (req, res) => {
+
+// http://localhost:1000/api/dashboard/getStatusChart
+router.post("/dashboard/getStatusChart", async (req, res) => {
   let queryResult = [];
-  dateFilter = "2021-03-10";
-  let statusQuery =
-    "SELECT status FROM transactions WHERE created_at LIKE '" +
-    dateFilter +
-    "%'";
-    let amountQuery =
-    "SELECT amount FROM transactions WHERE created_at LIKE '" +
-    dateFilter +
-    "%'";
-    let MIStatusQuery = "SELECT novati_status FROM transactions WHERE created_at LIKE '" +
-    dateFilter +
-    "%'";
-    let modeOfPaymentQuery = "SELECT bank FROM transactions WHERE created_at LIKE '" +
-    dateFilter +
-    "%'";
-    let totaltransactionQuery = "SELECT COUNT(*) FROM transactions WHERE created_at LIKE '" +
-    dateFilter +
-    "%'";
+  // let dateNow = new Date();
+  // let todayDate = dateNow.toISOString().slice(0, 10);
+  // let thisWeekDate = new Date(
+  //   dateNow.getFullYear(),
+  //   dateNow.getMonth(),
+  //   dateNow.getDate() - 6
+  // )
+  //   .toISOString()
+  //   .slice(0, 10);
+  let todayDate = "2021-05-30";
+  let thisWeekDate = "2021-05-23";
+  let isByWeek = req.body.isByWeek;
+  let subQuery = "";
+  if (isByWeek) {
+    subQuery =
+      "SELECT status FROM transactions WHERE created_at LIKE '" +
+      todayDate +
+      "%'";
+  } else {
+    subQuery =
+      "SELECT status FROM transactions WHERE created_at BETWEEN '" +
+      thisWeekDate +
+      "%' AND '" +
+      todayDate +
+      "%'";
+  }
+  let query =
+    "SELECT COUNT(*) AS count, status FROM (" +
+    subQuery +
+    ") as T GROUP BY status";
 
   await grabDB
-    .query(statusQuery, {
+    .query(query, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[0] = result[0];
+      let success = Object.values(result).find((obj) => {
+        return obj.status == "SUCCESS";
+      });
+      let failed = Object.values(result).find((obj) => {
+        return obj.status == "FAILED";
+      });
+      let pending = Object.values(result).find((obj) => {
+        return obj.status == "PENDING";
+      });
+      queryResult = { sucess: success, failed: failed, pending: pending };
+      res.send(queryResult);
     });
+});
+
+// http://localhost:1000/api/dashboard/getAmountChart
+router.post("/dashboard/getAmountChart", async (req, res) => {
+  let queryResult = [];
+  // let dateNow = new Date();
+  // let todayDate = dateNow.toISOString().slice(0, 10);
+  // let thisWeekDate = new Date(
+  //   dateNow.getFullYear(),
+  //   dateNow.getMonth(),
+  //   dateNow.getDate() - 6
+  // )
+  //   .toISOString()
+  //   .slice(0, 10);
+  let todayDate = "2021-09-23";
+  let thisWeekDate = "2021-09-16";
+  let isByWeek = req.body.isByWeek;
+  let subQuery = "";
+  if (isByWeek) {
+    subQuery =
+      "SELECT amount_value FROM transactions WHERE created_at LIKE '" +
+      todayDate +
+      "%'";
+  } else {
+    subQuery =
+      "SELECT amount_value FROM transactions WHERE created_at BETWEEN '" +
+      thisWeekDate +
+      "%' AND '" +
+      todayDate +
+      "%'";
+  }
+  let query =
+    "SELECT COUNT(*) AS count, amount_value FROM (" +
+    subQuery +
+    ") as T GROUP BY amount_value";
+
   await grabDB
-    .query(totalPayoutQuery, {
+    .query(query, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[1] = result[0];
-    });
-  await grabDB
-    .query(totalCustomerQuery, {
-      type: userDB.QueryTypes.SELECT,
-    })
-    .then((result) => {
-      queryResult[2] = result[0];
+      let success = Object.values(result).find((obj) => {
+        return obj.amount_value == 30;
+      });
+      let failed = Object.values(result).find((obj) => {
+        return obj.amount_value == 50;
+      });
+      let pending = Object.values(result).find((obj) => {
+        return obj.amount_value == 100;
+      });
+      queryResult = { 30: success, 50: failed, 100: pending };
       res.send(queryResult);
     });
 });

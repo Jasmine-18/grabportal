@@ -76,55 +76,37 @@ router.post("/logout", (req, res) => {
   });
 });
 
-// http://localhost:1000/api/db
-router.post("/db", async (req, res) => {
-  return await grabDB
-    .query("SELECT * FROM transactions WHERE id<200", {
-      type: userDB.QueryTypes.SELECT,
-    })
-    .then((result) => {
-      res.send(result);
-    });
-});
-
-// http://localhost:1000/api/history/getData
-router.post("/history/todayTransaction", async (req, res) => {
-  return await grabDB
-    .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
-      type: userDB.QueryTypes.SELECT,
-    })
-    .then((result) => {
-      res.send(result);
-    });
-});
-// http://localhost:1000/api/dashboard/getDataByWeek
-router.post("/dashboard/getDataByWeek", async (req, res) => {
+// http://localhost:1000/api/dashboard/getTotalCard
+router.post("/dashboard/getTotalCard", async (req, res) => {
   let queryResult = [];
-  let dateFilter = req.body.dateFilter;
-  let denoFilter = req.body.denoFilter;
-  let statusFilter = req.body.statusFilter;
+  let defaultEndDate = "2021-09-23";
+  let defaultStartDate = "2021-09-16";
+  let isDefault = req.body.isDefault;
+  let filterStartDate = req.body.startDate;
+  let filterEndDate = req.body.endDate;
+  let condition = "";
+  if (isDefault) {
+    condition +=
+      "WHERE created_at BETWEEN '" +
+      defaultStartDate +
+      "%' AND '" +
+      defaultEndDate +
+      "%'";
+  } else {
+    condition =
+      "WHERE created_at BETWEEN '" +
+      filterStartDate +
+      "%' AND '" +
+      filterEndDate +
+      "%'";
+  }
   let totalPayoutQuery =
-    "SELECT SUM(amount_total) AS totalPayout FROM transactions WHERE";
+    "SELECT SUM(amount_total) AS totalPayout FROM transactions " + condition;
   let totalCustomerQuery =
-    "SELECT COUNT(DISTINCT user_email) AS totalCustomer FROM transactions WHERE";
+    "SELECT COUNT(DISTINCT user_email) AS totalCustomer FROM transactions " +
+    condition;
   let totalTransactionQuery =
-    "SELECT COUNT(*) AS totalTransaction FROM transactions WHERE";
-  // date filter is required for every query
-  if (dateFilter) {
-    totalPayoutQuery += " created_at LIKE '" + dateFilter + "%'";
-    totalCustomerQuery += " created_at LIKE '" + dateFilter + "%'";
-    totalTransactionQuery += " created_at LIKE '" + dateFilter + "%'";
-  }
-  if (denoFilter) {
-    totalPayoutQuery += " AND amount_value = '" + denoFilter + "'";
-    totalCustomerQuery += " AND amount_value = '" + denoFilter + "'";
-    totalTransactionQuery += " AND amount_value = '" + denoFilter + "'";
-  }
-  if (statusFilter) {
-    totalPayoutQuery += " AND status= '" + statusFilter + "'";
-    totalCustomerQuery += " AND status= '" + statusFilter + "'";
-    totalTransactionQuery += " AND status= '" + statusFilter + "'";
-  }
+    "SELECT COUNT(*) AS totalTransaction FROM transactions " + condition;
 
   await grabDB
     .query(totalTransactionQuery, {
@@ -155,28 +137,32 @@ router.post("/dashboard/getStatusChart", async (req, res) => {
   let queryResult = [];
   // let dateNow = new Date();
   // let todayDate = dateNow.toISOString().slice(0, 10);
-  // let thisWeekDate = new Date(
+  // let defaultStartDate = new Date(
   //   dateNow.getFullYear(),
   //   dateNow.getMonth(),
-  //   dateNow.getDate() - 6
+  //   dateNow.getDate() - 29
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let todayDate = "2021-05-30";
-  let thisWeekDate = "2021-05-23";
-  let isByWeek = req.body.isByWeek;
+  let defaultEndDate = "2021-09-23";
+  let defaultStartDate = "2021-09-16";
+  let isDefault = req.body.isDefault;
+  let filterStartDate = req.body.startDate;
+  let filterEndDate = req.body.endDate;
   let subQuery = "";
-  if (isByWeek) {
+  if (isDefault) {
     subQuery =
-      "SELECT status FROM transactions WHERE created_at LIKE '" +
-      todayDate +
+      "SELECT status FROM transactions WHERE created_at BETWEEN '" +
+      defaultStartDate +
+      "%' AND '" +
+      defaultEndDate +
       "%'";
   } else {
     subQuery =
       "SELECT status FROM transactions WHERE created_at BETWEEN '" +
-      thisWeekDate +
+      filterStartDate +
       "%' AND '" +
-      todayDate +
+      filterEndDate +
       "%'";
   }
   let query =
@@ -208,28 +194,32 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
   let queryResult = [];
   // let dateNow = new Date();
   // let todayDate = dateNow.toISOString().slice(0, 10);
-  // let thisWeekDate = new Date(
+  // let defaultStartDate = new Date(
   //   dateNow.getFullYear(),
   //   dateNow.getMonth(),
-  //   dateNow.getDate() - 6
+  //   dateNow.getDate() - 29
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let todayDate = "2021-09-23";
-  let thisWeekDate = "2021-09-16";
-  let isByWeek = req.body.isByWeek;
+  let defaultEndDate = "2021-09-23";
+  let defaultStartDate = "2021-09-16";
+  let isDefault = req.body.isDefault;
+  let filterStartDate = req.body.startDate;
+  let filterEndDate = req.body.endDate;
   let subQuery = "";
-  if (isByWeek) {
+  if (isDefault) {
     subQuery =
-      "SELECT amount_value FROM transactions WHERE created_at LIKE '" +
-      todayDate +
+      "SELECT amount_value FROM transactions WHERE created_at BETWEEN '" +
+      defaultStartDate +
+      "%' AND '" +
+      defaultEndDate +
       "%'";
   } else {
     subQuery =
       "SELECT amount_value FROM transactions WHERE created_at BETWEEN '" +
-      thisWeekDate +
+      filterStartDate +
       "%' AND '" +
-      todayDate +
+      filterEndDate +
       "%'";
   }
   let query =
@@ -256,101 +246,148 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
     });
 });
 
-// http://localhost:1000/api/dashboard/getDataOverall
-router.post("/dashboard/getDataOverall", async (req, res) => {
+// http://localhost:1000/api/dashboard/getMIStatusChart
+router.post("/dashboard/getMIStatusChart", async (req, res) => {
   let queryResult = [];
-  let totalPayoutQuery =
-    "SELECT SUM(amount_total) AS totalPayout FROM transactions";
-  let totalCustomerQuery =
-    "SELECT COUNT(DISTINCT user_email) AS totalCustomer FROM transactions";
-  let totalTransactionQuery =
-    "SELECT COUNT(*) AS totalTransaction FROM transactions";
+  // let dateNow = new Date();
+  // let todayDate = dateNow.toISOString().slice(0, 10);
+  // let thisWeekDate = new Date(
+  //   dateNow.getFullYear(),
+  //   dateNow.getMonth(),
+  //   dateNow.getDate() - 6
+  // )
+  //   .toISOString()
+  //   .slice(0, 10);
+  let defaultEndDate = "2021-09-23";
+  let defaultStartDate = "2021-09-16";
+  let isDefault = req.body.isDefault;
+  let filterStartDate = req.body.startDate;
+  let filterEndDate = req.body.endDate;
+  let subQuery = "";
+  if (isDefault) {
+    subQuery =
+      "SELECT novati_status FROM transactions WHERE created_at BETWEEN '" +
+      defaultStartDate +
+      "%' AND '" +
+      defaultEndDate +
+      "%'";
+  } else {
+    subQuery =
+      "SELECT novati_status FROM transactions WHERE created_at BETWEEN '" +
+      filterStartDate +
+      "%' AND '" +
+      filterEndDate +
+      "%'";
+  }
+  let query =
+    "SELECT COUNT(*) AS count, novati_status FROM (" +
+    subQuery +
+    ") as T GROUP BY novati_status";
 
   await grabDB
-    .query(totalTransactionQuery, {
+    .query(query, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[0] = result[0];
-    });
-  await grabDB
-    .query(totalPayoutQuery, {
-      type: userDB.QueryTypes.SELECT,
-    })
-    .then((result) => {
-      queryResult[1] = result[0];
-    });
-  await grabDB
-    .query(totalCustomerQuery, {
-      type: userDB.QueryTypes.SELECT,
-    })
-    .then((result) => {
-      queryResult[2] = result[0];
+      let success = Object.values(result).find((obj) => {
+        return obj.novati_status == "SUCCESS";
+      });
+      let failed = Object.values(result).find((obj) => {
+        return obj.novati_status == "FAILED";
+      });
+      let pending = Object.values(result).find((obj) => {
+        return obj.novati_status == "PENDING";
+      });
+      queryResult = { sucess: success, failed: failed, pending: pending };
       res.send(queryResult);
     });
 });
 
-// http://localhost:1000/api/history/getFilteredData
-router.post("/history/getFilteredData", async (req, res) => {
-  let dateFilter = req.body.transactionDate;
-  let userEmailFilter = req.body.userEmail;
-  let userPhoneFilter = req.body.dateFilter;
-  let denoFilter = req.body.amount;
-  let statusFilter = req.body.status;
-  let dataQuery = "SELECT * FROM transactions WHERE";
-  // date filter is required for every query
-  if (dateFilter) {
-    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
+// http://localhost:1000/api/dashboard/getMOPChart
+router.post("/dashboard/getMOPChart", async (req, res) => {
+  let queryResult = [];
+  // let dateNow = new Date();
+  // let todayDate = dateNow.toISOString().slice(0, 10);
+  // let thisWeekDate = new Date(
+  //   dateNow.getFullYear(),
+  //   dateNow.getMonth(),
+  //   dateNow.getDate() - 6
+  // )
+  //   .toISOString()
+  //   .slice(0, 10);
+  let defaultEndDate = "2021-09-23";
+  let defaultStartDate = "2021-09-16";
+  let isDefault = req.body.isDefault;
+  let filterStartDate = req.body.startDate;
+  let filterEndDate = req.body.endDate;
+  let subQuery = "";
+  if (isDefault) {
+    subQuery =
+      "SELECT provider FROM transactions WHERE created_at BETWEEN '" +
+      defaultStartDate +
+      "%' AND '" +
+      defaultEndDate +
+      "%'";
+  } else {
+    subQuery =
+      "SELECT provider FROM transactions WHERE created_at BETWEEN '" +
+      filterStartDate +
+      "%' AND '" +
+      filterEndDate +
+      "%'";
   }
-  if (userEmailFilter) {
-    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
-  }
-  if (userPhoneFilter) {
-    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
-  }
-  if (denoFilter) {
-    dataQuery += " AND amount_value = '" + denoFilter + "'";
-  }
-  if (statusFilter) {
-    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
-  }
+  let query =
+    "SELECT COUNT(*) AS count, provider FROM (" +
+    subQuery +
+    ") as T GROUP BY provider";
 
   await grabDB
-    .query(dataQuery, {
+    .query(query, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      res.send(result);
+      let paynet = Object.values(result).find((obj) => {
+        return obj.provider == "paynet";
+      });
+      let KiplePay = Object.values(result).find((obj) => {
+        return obj.provider == "KiplePay";
+      });
+      let cc = Object.values(result).find((obj) => {
+        return obj.provider == "CC";
+      });
+      queryResult = { paynet: paynet, KiplePay: KiplePay, CC: cc };
+      res.send(queryResult);
+      // res.send(result)
     });
 });
 
-// http://localhost:1000/api/
-router.post("/dataToday", (req, res) => {
-  return grabDB
-    .query(
-      "SELECT SUM(amount_total) FROM transactions WHERE created_at LIKE '2021-03-30%'",
-      {
-        type: userDB.QueryTypes.SELECT,
-      }
-    )
-    .then((result) => {
-      res.send(result);
-    });
-});
-
-// http://localhost:1000/api/getFilteredData/:page/
-router.post("/getFilteredData/:page/", async (req, res, next) => {
+// http://localhost:1000/api/history/getFilteredData/:page/
+router.post("/history/getFilteredData/:page/", async (req, res, next) => {
   // example array of 150 items to be paged
   let items = [];
-  let dateFilter = req.body.transactionDate;
+  let startDateFilter = req.body.transactionStartDate;
+  let endDateFilter = req.body.transactionEndDate;
+  let transactionIDFilter = req.body.transactionID;
   let userEmailFilter = req.body.userEmail;
   let userPhoneFilter = req.body.userPhone;
   let denoFilter = req.body.deno;
   let statusFilter = req.body.status;
-  let dataQuery = "SELECT * FROM transactions WHERE";
+  let dataQuery =
+    "SELECT id,created_at,user_name,user_email,user_phone,amount_value,status,agent_transaction_id, novati_status, provider FROM transactions WHERE";
   // date filter is required for every query
-  if (dateFilter) {
-    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
+  if (startDateFilter && endDateFilter) {
+    dataQuery +=
+      " created_at BETWEEN '" +
+      startDateFilter +
+      "%' AND '" +
+      endDateFilter +
+      "%'";
+  } else if (startDateFilter) {
+    dataQuery += " created_at LIKE '" + startDateFilter + "%'";
+  }
+  if (transactionIDFilter) {
+    dataQuery +=
+      " AND id LIKE '%" + transactionIDFilter + "%'";
   }
   if (userEmailFilter) {
     dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
@@ -359,10 +396,10 @@ router.post("/getFilteredData/:page/", async (req, res, next) => {
     dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
   }
   if (denoFilter) {
-    dataQuery += " AND amount_value = '" + denoFilter + "'";
+    dataQuery += " AND amount_value = " + denoFilter;
   }
   if (statusFilter) {
-    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
+    dataQuery += " AND status LIKE '" + statusFilter + "'";
   }
 
   await grabDB
@@ -372,16 +409,6 @@ router.post("/getFilteredData/:page/", async (req, res, next) => {
     .then((result) => {
       items = Object.entries(result);
     });
-
-  // await grabDB
-  //   .query("SELECT * FROM transactions WHERE created_at LIKE '2021-03-30%'", {
-  //     type: userDB.QueryTypes.SELECT,
-  //   })
-  //   .then((response) => {
-  //     // keys = Object.keys(response);
-  //     items = Object.entries(response);
-  //   });
-
   // get page from query params or default to first page
   const page = parseInt(req.params.page) || 1;
 
@@ -391,7 +418,6 @@ router.post("/getFilteredData/:page/", async (req, res, next) => {
 
   // get page of items from items array
   const pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
-  // console.log(pageOfItems[0][1])
 
   // return pager object and current page of items
   return res.send({ pager, pageOfItems });

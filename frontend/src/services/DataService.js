@@ -1,8 +1,6 @@
 import http from "../http-common";
 class DataService {
-  getFilteredData(page, filter) {
-    return http.post(`/getFilteredData/${page}`, filter);
-  }
+  
   login(user) {
     return http.post("/login", user);
   }
@@ -12,11 +10,23 @@ class DataService {
   auth(headers) {
     return http.get("/auth", headers);
   }
-  getDataOverall() {
-    return http.post("/dashboard/getDataOverall");
+  getTotalCard(dateFilter) {
+    return http.post("/dashboard/getTotalCard",dateFilter);
   }
-  getTodayTransaction() {
-    return http.post("/history/todayTransaction");
+  getStatusChart(dateFilter) {
+    return http.post("/dashboard/getStatusChart",dateFilter);
+  }
+  getAmountChart(dateFilter) {
+    return http.post("/dashboard/getAmountChart",dateFilter);
+  }
+  getMIStatusChart(dateFilter) {
+    return http.post("/dashboard/getMIStatusChart",dateFilter);
+  }
+  getMOPChart(dateFilter) {
+    return http.post("/history/getMOPChart",dateFilter);
+  }
+  getFilteredData(page, filter) {
+    return http.post(`/history/getFilteredData/${page}`, filter);
   }
   exportData(filter) {
     return http.post("/export", filter,{responseType: 'blob'});

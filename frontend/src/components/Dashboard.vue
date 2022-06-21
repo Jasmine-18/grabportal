@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-slate-300">
+  <div class="min-h-screen bg-slate-300">
     <!-- Loading animation starts here -->
     <div
       v-if="loading"
@@ -32,7 +32,9 @@
       <!-- grid wrapper card -->
       <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:gap-2 mt-5">
         <!-- Total payouts card  -->
-        <div class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex">
+        <div
+          class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex"
+        >
           <div class="block p-2 w-full">
             <p class="font-semibold text-white text-xl">
               {{ totalPayout }}
@@ -99,16 +101,16 @@
 import { onMounted, ref } from "vue";
 import router from "../routes/routes";
 import DataService from "../services/DataService";
-import TestBar from "./TestBar.vue"
-undefined
+import TestBar from "./TestBar.vue";
+undefined;
 
 export default {
   setup() {
     const loading = ref(true);
-    const filter = ref({
-      dateFilter: "2021-08-09",
-      denoFilter: "30",
-      statusFilter: "SUCCESS",
+    const dateFilter = ref({
+      isDefault: true,
+      startDate: "2021-01-10",
+      endDate: null,
     });
     const totalAmount = ref({});
     const totalTransaction = ref("null");
@@ -116,10 +118,10 @@ export default {
     const totalPayout = ref("null");
     const todayTransaction = ref({});
 
-    async function getDataOverall() {
-      await DataService.getDataOverall()
-        .then((response) => {
-          totalAmount.value = response.data;
+    async function getTotalCard() {
+      await DataService.getTotalCard(dateFilter.value)
+        .then((res) => {
+          totalAmount.value = res.data;
           totalTransaction.value = totalAmount.value[0].totalTransaction;
           totalPayout.value = totalAmount.value[1].totalPayout;
           totalCustomer.value = totalAmount.value[2].totalCustomer;
@@ -134,9 +136,8 @@ export default {
       let token = localStorage.getItem("token");
       await DataService.auth({ headers: { authorization: token } })
         .then((response) => {
-          console.log(loading);
           console.log(response.data.message);
-          getDataOverall();
+          getTotalCard();
         })
         .catch((e) => {
           router.push("/deniedAccess");
@@ -146,7 +147,7 @@ export default {
       verifyUser();
     });
     return {
-      filter,
+      dateFilter,
       totalAmount,
       totalTransaction,
       totalCustomer,
@@ -154,9 +155,9 @@ export default {
       todayTransaction,
       loading,
       verifyUser,
-      getDataOverall,
+      getTotalCard,
     };
   },
-  components: { TestBar }
+  components: { TestBar },
 };
 </script>

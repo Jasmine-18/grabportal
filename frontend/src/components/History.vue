@@ -15,7 +15,7 @@
           <!-- Search box starts here -->
           <div class="bg-white p-6 rounded-xl shadow-lg mt-5">
             <div
-              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6"
             >
               <div class="flex flex-col">
                 <label
@@ -51,10 +51,24 @@
                 <label
                   for="transactionDateFilter"
                   class="font-medium text-sm text-stone-600"
-                  >Transaction Date</label
+                  >Transaction Date Start</label
                 >
                 <input
-                  v-model="filter.transactionDate"
+                  v-model="filter.transactionStartDate"
+                  type="date"
+                  id="transactionDateFilter"
+                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
+                />
+              </div>
+
+              <div class="flex flex-col">
+                <label
+                  for="transactionDateFilter"
+                  class="font-medium text-sm text-stone-600"
+                  >Transaction Date End</label
+                >
+                <input
+                  v-model="filter.transactionEndDate"
                   type="date"
                   id="transactionDateFilter"
                   class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
@@ -119,6 +133,7 @@
               class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6"
             >
               <button
+                @click="resetFilter()"
                 class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10"
               >
                 Reset
@@ -512,7 +527,7 @@
             >
               <svg
                 role="status"
-                class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-green-600"
+                class="inline w-8 h-8 mr-2 text-gray-200 animate-spin fill-green-600"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -627,7 +642,7 @@
                   {{ item[1].user_email }}
                 </td>
 
-                <td v-if="columnsChecked.amount">{{ item[1].amount_total }}</td>
+                <td v-if="columnsChecked.amount">{{ item[1].amount_value }}</td>
 
                 <td v-if="columnsChecked.status">{{ item[1].status }}</td>
 
@@ -701,7 +716,7 @@
                   {{ item[1].user_email }}
                 </td>
 
-                <td v-if="columnsChecked.amount">{{ item[1].amount_total }}</td>
+                <td v-if="columnsChecked.amount">{{ item[1].amount_value }}</td>
 
                 <td v-if="columnsChecked.status">{{ item[1].status }}</td>
 
@@ -814,7 +829,9 @@ export default {
     const pageOfItems = ref([]);
 
     const filter = ref({
-      transactionDate: "2021-10-03", //always required, should be set as today
+      transactionID: null,
+      transactionStartDate: "2021-10-03", //always required, should be set as today
+      transactionEndDate: "2021-10-04",
       userPhone: null,
       userEmail: null,
       deno: null,
@@ -837,8 +854,8 @@ export default {
     }
 
     function filterFunction() {
-      if (!filter.value.transactionDate) {
-        filter.value.transactionDate = "2021-10-03";
+      if (!filter.value.transactionStartDate) {
+        filter.value.transactionStartDate = "2021-10-03";
       }
       loading.value = true;
       DataService.getFilteredData(pager.value.currentPage, filter.value)
@@ -887,6 +904,18 @@ export default {
         fileLink.click();
       });
     }
+    function resetFilter() {
+      filter.value = {
+        transactionID: null,
+        transactionStartDate: "2021-10-03", //always required, should be set as today
+        transactionEndDate: "2021-10-04",
+        userPhone: null,
+        userEmail: null,
+        deno: null,
+        status: null,
+        asCSV: null,
+      };
+    }
 
     //watch(source,callback,option)
     watch(
@@ -930,6 +959,7 @@ export default {
       filterFunction,
       columnsSelectAll,
       exportData,
+      resetFilter,
     };
   },
 };

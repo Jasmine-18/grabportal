@@ -554,70 +554,70 @@
                 <th
                   v-if="columnsChecked.transactionDate"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Transaction Date
                 </th>
                 <th
                   v-if="columnsChecked.transactionID"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Transaction ID
                 </th>
                 <th
                   v-if="columnsChecked.userName"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Username
                 </th>
                 <th
                   v-if="columnsChecked.userPhone"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   User Phone
                 </th>
                 <th
                   v-if="columnsChecked.userEmail"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   User Email
                 </th>
                 <th
                   v-if="columnsChecked.amount"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Amount
                 </th>
                 <th
                   v-if="columnsChecked.status"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Status
                 </th>
                 <th
                   v-if="columnsChecked.miTransactionID"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   MI Transaction ID
                 </th>
                 <th
                   v-if="columnsChecked.miStatus"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   MI Status
                 </th>
                 <th
                   v-if="columnsChecked.modeOfPayment"
                   scope="col"
-                  class="uppercase px-6 py-3"
+                  class="uppercase px-6 py-3 border-2 border-slate-500"
                 >
                   Mode of Payment
                 </th>
@@ -629,36 +629,74 @@
                 class="hover:bg-gray-500 bg-slate-600 h-10"
                 v-if="index % 2 === 0"
               >
-                <td v-if="columnsChecked.transactionDate">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.transactionDate"
+                >
                   {{ item[1].created_at }}
                 </td>
-                <td v-if="columnsChecked.transactionID">{{ item[1].id }}</td>
-                <td v-if="columnsChecked.userName">{{ item[1].user_name }}</td>
-                <td v-if="columnsChecked.userPhone">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.transactionID"
+                >
+                  {{ item[1].id }}
+                </td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userName"
+                >
+                  {{ item[1].user_name }}
+                </td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userPhone"
+                >
                   {{ item[1].user_phone }}
                 </td>
 
-                <td v-if="columnsChecked.userEmail">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userEmail"
+                >
                   {{ item[1].user_email }}
                 </td>
 
-                <td v-if="columnsChecked.amount">{{ item[1].amount_value }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.amount"
+                >
+                  {{ item[1].amount_value }}
+                </td>
 
-                <td v-if="columnsChecked.status">{{ item[1].status }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.status"
+                >
+                  {{ item[1].status }}
+                </td>
 
-                <td v-if="columnsChecked.miTransactionID">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.miTransactionID"
+                >
                   {{ item[1].agent_transaction_id }}
                 </td>
 
-                <td v-if="columnsChecked.miStatus">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.miStatus"
+                >
                   {{ item[1].novati_status }}
                 </td>
 
-                <td v-if="columnsChecked.modeOfPayment">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.modeOfPayment"
+                >
                   {{ item[1].provider }}
                 </td>
 
-                <td>
+                <td class="pl-2">
                   <button
                     class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
                   >
@@ -700,39 +738,77 @@
               </tr>
 
               <tr class="hover:bg-gray-500 bg-slate-700 h-10" v-else>
-                <td v-if="columnsChecked.transactionDate">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.transactionDate"
+                >
                   {{ item[1].created_at }}
                 </td>
 
-                <td v-if="columnsChecked.transactionID">{{ item[1].id }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.transactionID"
+                >
+                  {{ item[1].id }}
+                </td>
 
-                <td v-if="columnsChecked.userName">{{ item[1].user_name }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userName"
+                >
+                  {{ item[1].user_name }}
+                </td>
 
-                <td v-if="columnsChecked.userPhone">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userPhone"
+                >
                   {{ item[1].user_phone }}
                 </td>
 
-                <td v-if="columnsChecked.userEmail">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.userEmail"
+                >
                   {{ item[1].user_email }}
                 </td>
 
-                <td v-if="columnsChecked.amount">{{ item[1].amount_value }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.amount"
+                >
+                  {{ item[1].amount_value }}
+                </td>
 
-                <td v-if="columnsChecked.status">{{ item[1].status }}</td>
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.status"
+                >
+                  {{ item[1].status }}
+                </td>
 
-                <td v-if="columnsChecked.miTransactionID">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.miTransactionID"
+                >
                   {{ item[1].agent_transaction_id }}
                 </td>
 
-                <td v-if="columnsChecked.miStatus">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.miStatus"
+                >
                   {{ item[1].novati_status }}
                 </td>
 
-                <td v-if="columnsChecked.modeOfPayment">
+                <td
+                  class="border-2 border-slate-500"
+                  v-if="columnsChecked.modeOfPayment"
+                >
                   {{ item[1].provider }}
                 </td>
 
-                <td>
+                <td class="pl-2">
                   <button
                     class="flex items-center p-1 text-white bg-green-600 hover:bg-green-700 rounded-md transition ease-in-out duration-200 translate-10"
                   >
@@ -836,7 +912,7 @@ export default {
       userEmail: null,
       deno: null,
       status: null,
-      asCSV: null,
+      isCSV: null,
     });
 
     function columnsSelectAll() {

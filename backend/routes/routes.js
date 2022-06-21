@@ -79,8 +79,8 @@ router.post("/logout", (req, res) => {
 // http://localhost:1000/api/dashboard/getTotalCard
 router.post("/dashboard/getTotalCard", async (req, res) => {
   let queryResult = [];
-  let defaultEndDate = "2021-09-23";
-  let defaultStartDate = "2021-09-16";
+  let defaultEndDate = "2021-05-12";
+  let defaultStartDate = "2021-05-10";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
@@ -144,8 +144,8 @@ router.post("/dashboard/getStatusChart", async (req, res) => {
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let defaultEndDate = "2021-09-23";
-  let defaultStartDate = "2021-09-16";
+  let defaultEndDate = "2021-05-12";
+  let defaultStartDate = "2021-05-10";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
@@ -201,8 +201,8 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let defaultEndDate = "2021-09-23";
-  let defaultStartDate = "2021-09-16";
+  let defaultEndDate = "2021-05-12";
+  let defaultStartDate = "2021-05-10";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
@@ -258,8 +258,8 @@ router.post("/dashboard/getMIStatusChart", async (req, res) => {
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let defaultEndDate = "2021-09-23";
-  let defaultStartDate = "2021-09-16";
+  let defaultEndDate = "2021-05-12";
+  let defaultStartDate = "2021-05-10";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
@@ -315,8 +315,8 @@ router.post("/dashboard/getMOPChart", async (req, res) => {
   // )
   //   .toISOString()
   //   .slice(0, 10);
-  let defaultEndDate = "2021-09-23";
-  let defaultStartDate = "2021-09-16";
+  let defaultEndDate = "2021-05-12";
+  let defaultStartDate = "2021-05-10";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
@@ -425,14 +425,45 @@ router.post("/history/getFilteredData/:page/", async (req, res, next) => {
 
 // http://localhost:1000/api/export
 router.post("/export", async (req, res) => {
-  let dataExport = [];
-  let csv = req.body.asCSV;
-  let dateFilter = req.body.transactionDate;
+  // example array of 150 items to be paged
+  let items = [];
+  let startDateFilter = req.body.transactionStartDate;
+  let endDateFilter = req.body.transactionEndDate;
+  let transactionIDFilter = req.body.transactionID;
   let userEmailFilter = req.body.userEmail;
   let userPhoneFilter = req.body.userPhone;
   let denoFilter = req.body.deno;
   let statusFilter = req.body.status;
-  let dataQuery = "SELECT * FROM transactions WHERE";
+  let isCSV = req.body.isCSV;
+  let dataQuery =
+    "SELECT id,created_at,user_name,user_email,user_phone,amount_value,status,agent_transaction_id, novati_status, provider FROM transactions WHERE";
+  // date filter is required for every query
+  if (startDateFilter && endDateFilter) {
+    dataQuery +=
+      " created_at BETWEEN '" +
+      startDateFilter +
+      "%' AND '" +
+      endDateFilter +
+      "%'";
+  } else if (startDateFilter) {
+    dataQuery += " created_at LIKE '" + startDateFilter + "%'";
+  }
+  if (transactionIDFilter) {
+    dataQuery +=
+      " AND id LIKE '%" + transactionIDFilter + "%'";
+  }
+  if (userEmailFilter) {
+    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
+  }
+  if (userPhoneFilter) {
+    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
+  }
+  if (denoFilter) {
+    dataQuery += " AND amount_value = " + denoFilter;
+  }
+  if (statusFilter) {
+    dataQuery += " AND status LIKE '" + statusFilter + "'";
+  }
   const convertToCSV = () => {
     const ws = fs.createWriteStream("transactionHistory.csv");
     fastcsv
@@ -464,24 +495,6 @@ router.post("/export", async (req, res) => {
       if (err) console.log(err);
     });
   };
-
-  // date filter is required for every query
-  if (dateFilter) {
-    dataQuery += " created_at LIKE '%" + dateFilter + "%'";
-  }
-  if (userEmailFilter) {
-    dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
-  }
-  if (userPhoneFilter) {
-    dataQuery += " AND user_phone LIKE '%" + userPhoneFilter + "%'";
-  }
-  if (denoFilter) {
-    dataQuery += " AND amount_value = '" + denoFilter + "'";
-  }
-  if (statusFilter) {
-    dataQuery += " AND status LIKE '%" + statusFilter + "%'";
-  }
-
   await grabDB
     .query(dataQuery, {
       type: userDB.QueryTypes.SELECT,
@@ -489,7 +502,7 @@ router.post("/export", async (req, res) => {
     .then((result) => {
       dataExport = result;
     });
-  if (csv) {
+  if (isCSV) {
     convertToCSV();
   } else {
     convertToExcel();

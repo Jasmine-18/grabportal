@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-slate-300">
+  <div class="h-screen-full bg-slate-300">
     <!-- <Navbar/> -->
     <div class="dashboard p-4">
       <div class="mt-5 w-full">
@@ -9,9 +9,7 @@
       <!-- grid wrapper card -->
       <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:gap-2 mt-5">
         <!-- Total payouts card  -->
-        <div
-          class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex"
-        >
+        <div class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex">
           <div class="block p-2 w-full">
             <p class="font-semibold text-white text-xl">
               {{ totalPayout }}
@@ -51,43 +49,23 @@
       </div>
       <!-- end wrapper card -->
 
-      <!-- Total Transactions Chart -->
-      <div class="mt-2 lg:flex block lg:gap-2">
-        <div class="mt-2 bg-gray-800 p-5 w-full rounded-md box-border shadow">
-          <h2 class="font-bold text-lg text-white">Total Transactions</h2>
-          <p class="text-gray-400 font-lexend font-normal">
-            description here (filter by number, amount, day, month, deno,
-            status)
-          </p>
-          <span class="float-right mr-20">
-            <h2 class="text-red-500 -mt-12 flex">
-              <span class="mr-2"> 0.00% </span
-              ><span>
-                <Icon icon="akar-icons:arrow-down" />
-              </span>
-            </h2>
-          </span>
-          <span class="float-right">
-            <h2 class="text-green-500 -mt-12 flex">
-              <span class="mr-2"> 0.00% </span
-              ><span>
-                <Icon icon="akar-icons:arrow-up" />
-              </span>
-            </h2>
-          </span>
-          <br />
-          <apexchart
-            width="100%"
-            height="380"
-            type="area"
-            :options="optionsArea"
-            :series="seriesArea"
-            :sparkline="{
-              enabled: true,
-            }"
-          ></apexchart>
-          <br />
-          <hr />
+      <!-- Four Main Charts -->
+      <div class="wrapper-card grid lg:grid-cols-2 grid-cols-2 md:gap-2 mt-5">
+        <!-- First chart -->
+        <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
+          <TestBar />
+        </div>
+        <!-- Second chart -->
+        <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
+          <TestBar />
+        </div>
+        <!-- Third chart -->
+        <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
+          <TestBar />
+        </div>
+        <!-- Fourth chart -->
+        <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
+          <TestBar />
         </div>
       </div>
     </div>
@@ -98,6 +76,9 @@
 import { onMounted, ref } from "vue";
 import router from "../routes/routes";
 import DataService from "../services/DataService";
+import TestBar from "./TestBar.vue"
+undefined
+
 export default {
   setup() {
     const filter = ref({
@@ -105,13 +86,11 @@ export default {
       denoFilter: "30",
       statusFilter: "SUCCESS",
     });
-
     const totalAmount = ref({});
     const totalTransaction = ref("null");
     const totalCustomer = ref("null");
     const totalPayout = ref("null");
     const todayTransaction = ref({});
-
     function getTotalAmount() {
       DataService.getTotalAmount(filter.value)
         .then((response) => {
@@ -124,7 +103,6 @@ export default {
           console.warn(e);
         });
     }
-
     function verifyUser() {
       let token = localStorage.getItem("token");
       DataService.auth({ headers: { authorization: token } })
@@ -135,7 +113,6 @@ export default {
           router.push("/deniedAccess");
         });
     }
-
     function getTodayTransaction() {
       DataService.getTodayTransaction()
         .then((response) => {
@@ -145,13 +122,11 @@ export default {
           console.warn(e);
         });
     }
-
     onMounted(() => {
       verifyUser();
       getTotalAmount();
       getTodayTransaction();
     });
-    
     return {
       filter,
       totalAmount,
@@ -161,8 +136,9 @@ export default {
       todayTransaction,
       verifyUser,
       getTotalAmount,
-      getTodayTransaction,
+      getTodayTransaction
     };
   },
+  components: { TestBar }
 };
 </script>

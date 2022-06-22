@@ -52,6 +52,23 @@
                   for="transactionDateFilter"
                   class="font-medium text-sm text-stone-600"
                   >Transaction Date Start</label
+<<<<<<< Updated upstream
+=======
+                >
+                <input
+                  v-model="filter.transactionDate"
+                  type="date"
+                  id="transactionDateFilter"
+                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
+                />
+              </div>
+
+              <div class="flex flex-col">
+                <label
+                  for="transactionDateFilter"
+                  class="font-medium text-sm text-stone-600"
+                  >Transaction Date End</label
+>>>>>>> Stashed changes
                 >
                 <input
                   v-model="filter.transactionStartDate"

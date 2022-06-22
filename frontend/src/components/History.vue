@@ -61,20 +61,6 @@
                 />
               </div>
 
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
-                >
-                <input
-                  v-model="filter.transactionEndDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
               <!-- Edit it so that users are able to unselect their option -->
               <div class="flex flex-col">
                 <label
@@ -1039,6 +1025,7 @@ export default {
       exportData,
       resetFilter,
     };
+
   },
 };
 </script>

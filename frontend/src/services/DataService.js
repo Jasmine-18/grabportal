@@ -11,19 +11,19 @@ class DataService {
     return http.get("/auth", headers);
   }
   getTotalCard(dateFilter) {
-    return http.post("/dashboard/getTotalCard",dateFilter);
+    return http.post("/dashboard/getTotalCard", dateFilter);
   }
   getStatusChart(dateFilter) {
-    return http.post("/dashboard/getStatusChart",dateFilter);
+    return http.post("/dashboard/getStatusChart", dateFilter);
   }
   getAmountChart(dateFilter) {
-    return http.post("/dashboard/getAmountChart",dateFilter);
+    return http.post("/dashboard/getAmountChart", dateFilter);
   }
   getMIStatusChart(dateFilter) {
-    return http.post("/dashboard/getMIStatusChart",dateFilter);
+    return http.post("/dashboard/getMIStatusChart", dateFilter);
   }
   getMOPChart(dateFilter) {
-    return http.post("/history/getMOPChart",dateFilter);
+    return http.post("/dashboard/getMOPChart", dateFilter); // previously "/history/getMOPChart"
   }
   getFilteredData(page, filter) {
     return http.post(`/history/getFilteredData/${page}`, filter);
@@ -32,4 +32,5 @@ class DataService {
     return http.post("/export", filter,{responseType: 'blob'});
   }
 }
+
 export default new DataService();

@@ -32,9 +32,7 @@
       <!-- grid wrapper card -->
       <div class="wrapper-card grid lg:grid-cols-3 grid-cols-1 md:gap-2 mt-5">
         <!-- Total payouts card  -->
-        <div
-          class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex"
-        >
+        <div class="card bg-white bg-gray-800 w-full rounded-md p-5 shadow flex">
           <div class="block p-2 w-full">
             <p class="font-semibold text-white text-xl">
               {{ totalPayout }}
@@ -82,110 +80,14 @@
             Transaction Status
           </h2>
           <TransactionStatusChart />
-          <div class="bg-white p-6 rounded-xl shadow-lg mt-5">
-            <div class="grid grid-cols-2 gap-6">
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date Start</label
-                >
-                <input
-                  v-model="dateFilter.startDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
-                >
-                <input
-                  v-model="dateFilter.endDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-            </div>
-
-            <div
-              class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6"
-            >
-              <button
-                class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10"
-              >
-                Last 30 days
-              </button>
-
-              <button
-                @click="filterFunction()"
-                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
         </div>
 
-        <!-- Transaction Amount pie chart -->
+        <!-- Transaction Amount bar chart -->
         <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
           <h2 class="font-normal text-gray-400 text-lg mt-1">
-            Transaction Amount (Deno)
+            Transaction Deno
           </h2>
           <TransactionAmountChart />
-          <div class="bg-white p-6 rounded-xl shadow-lg mt-5">
-            <div class="grid grid-cols-2 gap-6">
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date Start</label
-                >
-                <input
-                  v-model="dateFilter.startDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
-                >
-                <input
-                  v-model="dateFilter.endDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-            </div>
-
-            <div
-              class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6"
-            >
-              <button
-                class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10"
-              >
-                Last 30 days
-              </button>
-
-              <button
-                @click="filterFunction()"
-                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
         </div>
 
         <!-- MI Transaction Status bar chart -->
@@ -194,110 +96,14 @@
             MI Transaction Status
           </h2>
           <MITransactionStatusChart />
-          <div class="bg-white p-6 rounded-xl shadow-lg mt-5">
-            <div class="grid grid-cols-2 gap-6">
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date Start</label
-                >
-                <input
-                  v-model="dateFilter.startDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
-                >
-                <input
-                  v-model="dateFilter.endDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-            </div>
-
-            <div
-              class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6"
-            >
-              <button
-                class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10"
-              >
-                Last 30 days
-              </button>
-
-              <button
-                @click="filterFunction()"
-                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
         </div>
 
-        <!-- Mode Of Payment pie chart -->
+        <!-- Mode Of Payment bar chart -->
         <div class="card bg-gray-800 w-full h-fit rounded-md p-5 shadow">
           <h2 class="font-normal text-gray-400 text-lg mt-1">
             Mode of Payment
           </h2>
           <ModeOfPaymentChart />
-          <div class="bg-white p-6 rounded-xl shadow-lg mt-5">
-            <div class="grid grid-cols-2 gap-6">
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date Start</label
-                >
-                <input
-                  v-model="dateFilter.startDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
-                >
-                <input
-                  v-model="dateFilter.endDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-            </div>
-
-            <div
-              class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6"
-            >
-              <button
-                class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10"
-              >
-                Last 30 days
-              </button>
-
-              <button
-                @click="filterFunction()"
-                class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10"
-              >
-                Apply
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -308,10 +114,12 @@
 import { onMounted, ref } from "vue";
 import router from "../routes/routes";
 import DataService from "../services/DataService";
-import MITransactionStatusChart from "./MITransactionStatusChart.vue";
-import ModeOfPaymentChart from "./ModeOfPaymentChart.vue";
-import TransactionAmountChart from "./TransactionAmountChart.vue";
-import TransactionStatusChart from "./TransactionStatusChart.vue";
+import MITransactionStatusChart from "./MITransactionStatusChart.vue"
+import ModeOfPaymentChart from "./ModeOfPaymentChart.vue"
+import TransactionAmountChart from "./TransactionAmountChart.vue"
+import TransactionStatusChart from "./TransactionStatusChart.vue"
+undefined
+
 export default {
   setup() {
     onMounted(() => {

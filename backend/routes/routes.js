@@ -79,13 +79,23 @@ router.post("/logout", (req, res) => {
 // http://localhost:1000/api/dashboard/getTotalCard
 router.post("/dashboard/getTotalCard", async (req, res) => {
   let queryResult = [];
+  // let dateNow = new Date();
+  // let todayDate = dateNow.toISOString().slice(0, 10);
+  // let defaultStartDate = new Date(
+  //   dateNow.getFullYear(),
+  //   dateNow.getMonth(),
+  //   dateNow.getDate() - 29
+  // )
+  //   .toISOString()
+  //   .slice(0, 10);
   let defaultEndDate = "2021-05-12";
-  let defaultStartDate = "2021-05-10";
+  let defaultStartDate = "2021-04-12";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
   let condition = "";
   if (isDefault) {
+    queryResult[0] = { startDate: defaultStartDate, endDate: defaultEndDate };
     condition +=
       "WHERE created_at BETWEEN '" +
       defaultStartDate +
@@ -93,6 +103,7 @@ router.post("/dashboard/getTotalCard", async (req, res) => {
       defaultEndDate +
       "%'";
   } else {
+    queryResult[0] = { startDate: filterStartDate, endDate: filterEndDate };
     condition =
       "WHERE created_at BETWEEN '" +
       filterStartDate +
@@ -113,21 +124,22 @@ router.post("/dashboard/getTotalCard", async (req, res) => {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[0] = result[0];
+      queryResult[1] = result[0];
     });
   await grabDB
     .query(totalPayoutQuery, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[1] = result[0];
+      queryResult[2] = result[0];
     });
   await grabDB
     .query(totalCustomerQuery, {
       type: userDB.QueryTypes.SELECT,
     })
     .then((result) => {
-      queryResult[2] = result[0];
+      queryResult[3] = result[0];
+
       res.send(queryResult);
     });
 });
@@ -145,12 +157,13 @@ router.post("/dashboard/getStatusChart", async (req, res) => {
   //   .toISOString()
   //   .slice(0, 10);
   let defaultEndDate = "2021-05-12";
-  let defaultStartDate = "2021-05-10";
+  let defaultStartDate = "2021-04-12";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
   let subQuery = "";
   if (isDefault) {
+    queryResult[0] = { startDate: defaultStartDate, endDate: defaultEndDate };
     subQuery =
       "SELECT status FROM transactions WHERE created_at BETWEEN '" +
       defaultStartDate +
@@ -158,6 +171,7 @@ router.post("/dashboard/getStatusChart", async (req, res) => {
       defaultEndDate +
       "%'";
   } else {
+    queryResult[0] = { startDate: filterStartDate, endDate: filterEndDate };
     subQuery =
       "SELECT status FROM transactions WHERE created_at BETWEEN '" +
       filterStartDate +
@@ -184,7 +198,7 @@ router.post("/dashboard/getStatusChart", async (req, res) => {
       let pending = Object.values(result).find((obj) => {
         return obj.status == "PENDING";
       });
-      queryResult = { sucess: success, failed: failed, pending: pending };
+      queryResult[1] = { success: success, failed: failed, pending: pending };
       res.send(queryResult);
     });
 });
@@ -202,12 +216,13 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
   //   .toISOString()
   //   .slice(0, 10);
   let defaultEndDate = "2021-05-12";
-  let defaultStartDate = "2021-05-10";
+  let defaultStartDate = "2021-04-12";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
   let subQuery = "";
   if (isDefault) {
+    queryResult[0] = { startDate: defaultStartDate, endDate: defaultEndDate };
     subQuery =
       "SELECT amount_value FROM transactions WHERE created_at BETWEEN '" +
       defaultStartDate +
@@ -215,6 +230,7 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
       defaultEndDate +
       "%'";
   } else {
+    queryResult[0] = { startDate: filterStartDate, endDate: filterEndDate };
     subQuery =
       "SELECT amount_value FROM transactions WHERE created_at BETWEEN '" +
       filterStartDate +
@@ -241,7 +257,7 @@ router.post("/dashboard/getAmountChart", async (req, res) => {
       let pending = Object.values(result).find((obj) => {
         return obj.amount_value == 100;
       });
-      queryResult = { 30: success, 50: failed, 100: pending };
+      queryResult[1] = { 30: success, 50: failed, 100: pending };
       res.send(queryResult);
     });
 });
@@ -259,12 +275,13 @@ router.post("/dashboard/getMIStatusChart", async (req, res) => {
   //   .toISOString()
   //   .slice(0, 10);
   let defaultEndDate = "2021-05-12";
-  let defaultStartDate = "2021-05-10";
+  let defaultStartDate = "2021-04-12";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
   let subQuery = "";
   if (isDefault) {
+    queryResult[0] = { startDate: defaultStartDate, endDate: defaultEndDate };
     subQuery =
       "SELECT novati_status FROM transactions WHERE created_at BETWEEN '" +
       defaultStartDate +
@@ -272,6 +289,7 @@ router.post("/dashboard/getMIStatusChart", async (req, res) => {
       defaultEndDate +
       "%'";
   } else {
+    queryResult[0] = { startDate: filterStartDate, endDate: filterEndDate };
     subQuery =
       "SELECT novati_status FROM transactions WHERE created_at BETWEEN '" +
       filterStartDate +
@@ -298,7 +316,7 @@ router.post("/dashboard/getMIStatusChart", async (req, res) => {
       let pending = Object.values(result).find((obj) => {
         return obj.novati_status == "PENDING";
       });
-      queryResult = { sucess: success, failed: failed, pending: pending };
+      queryResult[1] = { sucess: success, failed: failed, pending: pending };
       res.send(queryResult);
     });
 });
@@ -316,12 +334,13 @@ router.post("/dashboard/getMOPChart", async (req, res) => {
   //   .toISOString()
   //   .slice(0, 10);
   let defaultEndDate = "2021-05-12";
-  let defaultStartDate = "2021-05-10";
+  let defaultStartDate = "2021-04-12";
   let isDefault = req.body.isDefault;
   let filterStartDate = req.body.startDate;
   let filterEndDate = req.body.endDate;
   let subQuery = "";
   if (isDefault) {
+    queryResult[0] = { startDate: defaultStartDate, endDate: defaultEndDate };
     subQuery =
       "SELECT provider FROM transactions WHERE created_at BETWEEN '" +
       defaultStartDate +
@@ -329,6 +348,7 @@ router.post("/dashboard/getMOPChart", async (req, res) => {
       defaultEndDate +
       "%'";
   } else {
+    queryResult[0] = { startDate: filterStartDate, endDate: filterEndDate };
     subQuery =
       "SELECT provider FROM transactions WHERE created_at BETWEEN '" +
       filterStartDate +
@@ -355,7 +375,7 @@ router.post("/dashboard/getMOPChart", async (req, res) => {
       let cc = Object.values(result).find((obj) => {
         return obj.provider == "CC";
       });
-      queryResult = { paynet: paynet, KiplePay: KiplePay, CC: cc };
+      queryResult[1] = { paynet: paynet, KiplePay: KiplePay, CC: cc };
       res.send(queryResult);
       // res.send(result)
     });
@@ -386,8 +406,7 @@ router.post("/history/getFilteredData/:page/", async (req, res, next) => {
     dataQuery += " created_at LIKE '" + startDateFilter + "%'";
   }
   if (transactionIDFilter) {
-    dataQuery +=
-      " AND id LIKE '%" + transactionIDFilter + "%'";
+    dataQuery += " AND id LIKE '%" + transactionIDFilter + "%'";
   }
   if (userEmailFilter) {
     dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";
@@ -449,8 +468,7 @@ router.post("/export", async (req, res) => {
     dataQuery += " created_at LIKE '" + startDateFilter + "%'";
   }
   if (transactionIDFilter) {
-    dataQuery +=
-      " AND id LIKE '%" + transactionIDFilter + "%'";
+    dataQuery += " AND id LIKE '%" + transactionIDFilter + "%'";
   }
   if (userEmailFilter) {
     dataQuery += " AND user_email LIKE '%" + userEmailFilter + "%'";

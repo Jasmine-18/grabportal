@@ -52,23 +52,6 @@
                   for="transactionDateFilter"
                   class="font-medium text-sm text-stone-600"
                   >Transaction Date Start</label
-<<<<<<< Updated upstream
-=======
-                >
-                <input
-                  v-model="filter.transactionDate"
-                  type="date"
-                  id="transactionDateFilter"
-                  class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black"
-                />
-              </div>
-
-              <div class="flex flex-col">
-                <label
-                  for="transactionDateFilter"
-                  class="font-medium text-sm text-stone-600"
-                  >Transaction Date End</label
->>>>>>> Stashed changes
                 >
                 <input
                   v-model="filter.transactionStartDate"
@@ -948,6 +931,7 @@ export default {
 
     function filterFunction() {
       if (!filter.value.transactionStartDate) {
+        // set to today date
         filter.value.transactionStartDate = "2021-10-03";
       }
       loading.value = true;
@@ -1000,7 +984,8 @@ export default {
     function resetFilter() {
       filter.value = {
         transactionID: null,
-        transactionStartDate: "2021-10-03", //always required, should be set as today
+        //always required, should be set as today
+        transactionStartDate: "2021-10-03",
         transactionEndDate: "2021-10-04",
         userPhone: null,
         userEmail: null,

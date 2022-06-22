@@ -62,6 +62,7 @@ export default {
       name: 'series',
       data: [0, 0, 0]
     }]);
+
     async function getDefaultStatusChart() {
       dateFilter.value.isDefault = true;
       await DataService.getStatusChart(dateFilter.value)
@@ -82,6 +83,7 @@ export default {
           console.warn(e)
         })
     };
+    
     async function getFilterStatusChart() {
       dateFilter.value.isDefault = false;
       await DataService.getStatusChart(dateFilter.value)

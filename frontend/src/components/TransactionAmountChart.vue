@@ -7,25 +7,25 @@
       <div class="flex flex-col">
         <label for="transactionDateFilter" class="font-medium text-sm text-stone-600">Transaction Date
           Start</label>
-        <input v-model="dateFilter.transactionDate" type="date" id="transactionDateFilter"
+        <input v-model="dateFilter.startDate" type="date" id="transactionDateFilter"
           class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black" />
       </div>
 
       <div class="flex flex-col">
         <label for="transactionDateFilter" class="font-medium text-sm text-stone-600">Transaction Date
           End</label>
-        <input v-model="dateFilter.transactionDate" type="date" id="transactionDateFilter"
+        <input v-model="dateFilter.endDate" type="date" id="transactionDateFilter"
           class="mt-2 w-full px-1 py-1 border-solid border-2 rounded-lg text-black" />
       </div>
     </div>
 
     <div class="grid md:flex grid-cols-2 justify-end space-x-4 w-full mt-6">
-      <button @click="filterFunction()"
+      <button @click="getDefaultAmountChart()"
         class="px-4 py-2 rounded-lg bg-gray-400 hover:bg-gray-500 font-bold text-white shadow-lg shadow-gray-200 transition ease-in-out duration-200 translate-10">
         Last 30 days
       </button>
 
-      <button @click="filterFunction()"
+      <button @click="getFilterAmountChart()"
         class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 font-bold text-white shadow-lg shadow-green-200 transition ease-in-out duration-200 translate-10">
         Apply
       </button>
@@ -40,13 +40,13 @@ export default {
 
   setup() {
     onMounted(() => {
-      getAmountChart();
+      getDefaultAmountChart();
     })
 
     const dateFilter = ref({
-      isDefault: false,
-      startDate: "2021-01-10",
-      endDate: "2021-05-30"
+      isDefault: true,
+      startDate: null,
+      endDate: null
     });
 
     const options = ref({
@@ -63,10 +63,32 @@ export default {
       data: [0, 0, 0]
     }]);
 
-    async function getAmountChart() {
+    async function getDefaultAmountChart() {
+      dateFilter.value.isDefault = true;
       await DataService.getAmountChart(dateFilter.value)
         .then((res) => {
-          console.log(res.data[30])
+          dateFilter.value.startDate = res.data[0].startDate
+          dateFilter.value.endDate = res.data[0].endDate
+          if (res.data[1][30]) {
+            series.value[0].data[0] = res.data[1][30].count
+          }
+          if (res.data[1][50]) {
+            series.value[0].data[1] = res.data[1][50].count
+          }
+          if (res.data[1][100]) {
+            series.value[0].data[2] = res.data[1][100].count
+          }
+        })
+        .catch((e) => {
+          console.warn(e)
+        })
+    };
+
+    async function getFilterAmountChart() {
+      dateFilter.value.isDefault = false;
+      await DataService.getAmountChart(dateFilter.value)
+        .then((res) => {
+          console.log(res)
           if (res.data[30]) {
             series.value[0].data[0] = res.data[30].count
           }
@@ -83,7 +105,7 @@ export default {
     };
 
     return {
-      dateFilter, options, series
+      dateFilter, options, series, getDefaultAmountChart, getFilterAmountChart
     };
   }
 }
